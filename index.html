@@ -103,20 +103,20 @@
                     31K Packets. 4 Specialists. <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#6CEECB] to-[#0AA2DD]">The Math Doesn't Work.</span>
                 </h1>
                 <p class="text-lg md:text-xl font-medium text-blue-100/80 leading-relaxed max-w-3xl mb-10 animate-fade-up animate-fade-up-delay-2">
-                    HOMELINK needs to process 31,000 credentialing packets per year — 16K recredentials (now annual under the new CMS rule) plus 15K new providers. The current team maxes out at 6,240. A CVO partner closes the gap, cuts provider applications from 4 hours to 25 minutes, and saves $1.5M+ in hiring costs over 3 years.
+                    HOMELINK needs to process 37,000+ credentialing packets per year — 16K DME recreds (now annual under the new CMS rule), ~9K non-DME recreds, plus 12,500 new providers. The current team of 4 maxes out at 6,240. That's an 80% shortfall — requiring 24 FTEs to close through hiring alone. A CVO partner eliminates this gap at a fraction of the cost.
                 </p>
                 <div class="flex flex-wrap gap-4 animate-fade-up animate-fade-up-delay-3">
                     <div class="stat-card rounded-xl px-6 py-4 text-center">
-                        <div class="text-3xl font-bold text-[#D05B57] font-display">21K+</div>
-                        <div class="text-xs text-blue-200/70 mt-1">Annual Packet Gap</div>
+                        <div class="text-3xl font-bold text-[#D05B57] font-display">24</div>
+                        <div class="text-xs text-blue-200/70 mt-1">FTEs Needed (Have 4)</div>
                     </div>
                     <div class="stat-card rounded-xl px-6 py-4 text-center">
-                        <div class="text-3xl font-bold text-[#FEC041] font-display">$1.5M+</div>
-                        <div class="text-xs text-blue-200/70 mt-1">3-Year Hiring Cost Avoided</div>
+                        <div class="text-3xl font-bold text-[#FEC041] font-display">$4.6M</div>
+                        <div class="text-xs text-blue-200/70 mt-1">3-Year Cost to Staff Demand</div>
                     </div>
                     <div class="stat-card rounded-xl px-6 py-4 text-center">
                         <div class="text-3xl font-bold text-[#6CEECB] font-display">4→1</div>
-                        <div class="text-xs text-blue-200/70 mt-1">FTEs on Credentialing</div>
+                        <div class="text-xs text-blue-200/70 mt-1">FTEs with CVO</div>
                     </div>
                     <div class="stat-card rounded-xl px-6 py-4 text-center">
                         <div class="text-3xl font-bold text-[#0AA2DD] font-display">25 min</div>
@@ -136,15 +136,15 @@
                     <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#D05B57] mb-4">The Current State</p>
                     <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">The Team Is Already Underwater</h2>
                     <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                        With 42,000 practitioners in the network and a new CMS rule reducing DME recredentialing from every 3 years to every year, HOMELINK now faces 16,000 recredentialing packets annually — before a single new provider is added. Combined with the growth target of 10,000–15,000 new providers per year, total demand exceeds 31,000 packets/year. Four specialists averaging 30 packets/week can only process 6,240.
+                        With 42,000 practitioners in the network, a new CMS rule reducing DME recredentialing from every 3 years to every year, and non-DME providers on a 3-year cycle, HOMELINK faces 25,000+ recredentialing packets per year — before a single new provider is added. Combined with the growth target of 10,000–15,000 new providers per year, total demand reaches 37,000+ packets in Year 1 alone. Four specialists averaging 30 packets/week can only process 6,240 — an 80% shortfall that requires 24 FTEs to close through hiring.
                     </p>
 
                     <div class="space-y-4">
                         <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-red-500 flex items-start space-x-4">
-                            <div class="bg-red-50 text-red-600 p-2 rounded-lg text-sm font-bold flex-shrink-0">31K</div>
+                            <div class="bg-red-50 text-red-600 p-2 rounded-lg text-sm font-bold flex-shrink-0">37K+</div>
                             <div>
                                 <h4 class="font-bold text-slate-800">Annual Packet Demand</h4>
-                                <p class="text-sm text-slate-500">16,000 recredentials (annual under new CMS rule) + 15,000 new providers = 31,000 packets/year the team must process.</p>
+                                <p class="text-sm text-slate-500">16,000 DME recreds (annual under new CMS rule) + ~9,000 non-DME recreds (3-yr cycle) + 12,500 new providers = 37,500 packets/year the team must process in Year 1.</p>
                             </div>
                         </div>
                         <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-red-400 flex items-start space-x-4">
@@ -175,15 +175,15 @@
                 <div>
                     <div class="bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-slate-100 mb-6">
                         <h3 class="text-center font-bold text-slate-800 text-sm uppercase tracking-widest mb-2 font-display">Annual Capacity vs. Demand</h3>
-                        <p class="text-center text-slate-400 text-xs mb-6">4 specialists · 31,000 packets/year required</p>
+                        <p class="text-center text-slate-400 text-xs mb-6">4 specialists · 37,200 packets/year required (Year 1)</p>
                         <div class="chart-container" style="max-width:100%; height: 300px;">
                             <canvas id="capacityChart"></canvas>
                         </div>
                     </div>
                     <div class="bg-red-50 border border-red-200 rounded-2xl p-6 text-center gap-bar-bg">
-                        <p class="text-red-700 font-bold text-lg font-display">24,760 packet gap</p>
-                        <p class="text-red-600 text-sm mt-1">At the team average of 30/wk, the current team covers only <strong>20%</strong> of annual demand</p>
-                        <p class="text-red-500 text-xs mt-2">Even at peak (45/wk all 4 specialists), capacity is 9,360 — still a 70% shortfall</p>
+                        <p class="text-red-700 font-bold text-lg font-display">30,960 packet gap (Year 1)</p>
+                        <p class="text-red-600 text-sm mt-1">At the team average of 30/wk, the current team covers only <strong>17%</strong> of Year 1 demand (37,200 packets)</p>
+                        <p class="text-red-500 text-xs mt-2">Even at peak (45/wk all 4), capacity is 9,360 — still a 75% shortfall. HOMELINK needs 24 FTEs to meet Year 1 demand alone.</p>
                     </div>
                 </div>
             </div>
@@ -252,73 +252,113 @@
                 </div>
             </div>
 
-            <!-- Team Man-Hours 3-Year Projection -->
+            <!-- Team FTE Demand & 3-Year Projection -->
             <div>
-                <h3 class="text-xl font-bold text-slate-800 mb-6 font-display text-center">Internal Team: 3-Year FTE & Cost Projection</h3>
-                <div class="overflow-x-auto">
+                <h3 class="text-xl font-bold text-slate-800 mb-2 font-display text-center">The Real FTE Math: Demand vs. Reality</h3>
+                <p class="text-center text-slate-500 text-sm mb-6">Each specialist processes ~1,560 packets/year (30/wk × 50 working weeks). How many does HOMELINK actually need?</p>
+
+                <!-- Status Quo Demand Table -->
+                <div class="overflow-x-auto mb-8">
                     <table class="w-full text-sm border-collapse">
                         <thead>
-                            <tr class="bg-slate-50">
-                                <th class="p-4 text-left font-semibold text-slate-500 uppercase text-xs tracking-wider" rowspan="2"></th>
-                                <th class="p-4 text-center font-semibold text-slate-500 uppercase text-xs tracking-wider" rowspan="2">Network<br/>Size</th>
-                                <th class="p-4 text-center font-semibold text-[#D05B57] uppercase text-xs tracking-wider border-b-2 border-red-200" colspan="2">Status Quo (Keep Internal)</th>
-                                <th class="p-4 text-center font-semibold text-[#1E948D] uppercase text-xs tracking-wider border-b-2 border-[#6CEECB]" colspan="2">Verifiable CVO</th>
+                            <tr class="bg-red-50">
+                                <th class="p-3 text-left font-semibold text-[#D05B57] uppercase text-xs tracking-wider" colspan="7">Status Quo: Packet Demand vs. Team Capacity</th>
                             </tr>
                             <tr class="bg-slate-50">
-                                <th class="p-3 text-center text-xs text-slate-400">Cred FTEs</th>
-                                <th class="p-3 text-center text-xs text-slate-400">Annual Cost*</th>
-                                <th class="p-3 text-center text-xs text-slate-400">Cred FTEs</th>
-                                <th class="p-3 text-center text-xs text-slate-400">Annual Cost*</th>
+                                <th class="p-3 text-left text-xs text-slate-500 font-semibold"></th>
+                                <th class="p-3 text-center text-xs text-slate-500 font-semibold">Network</th>
+                                <th class="p-3 text-center text-xs text-slate-500 font-semibold">Annual Packet<br/>Demand</th>
+                                <th class="p-3 text-center text-xs text-slate-500 font-semibold">FTEs Needed<br/>to Meet Demand</th>
+                                <th class="p-3 text-center text-xs text-slate-500 font-semibold">Realistic<br/>Hire Pace</th>
+                                <th class="p-3 text-center text-xs text-slate-500 font-semibold">Unfilled<br/>FTE Gap</th>
+                                <th class="p-3 text-center text-xs text-slate-500 font-semibold">Annual FTE<br/>Cost (Hired)*</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
                             <tr class="bg-slate-50/50">
-                                <td class="p-4 font-medium text-slate-800">Today</td>
-                                <td class="p-4 text-center text-slate-600">42,000</td>
-                                <td class="p-4 text-center text-slate-600">4</td>
-                                <td class="p-4 text-center text-slate-600">$240K</td>
-                                <td class="p-4 text-center text-slate-400" colspan="2">—</td>
+                                <td class="p-3 font-medium text-slate-800">Today</td>
+                                <td class="p-3 text-center text-slate-600">42,000</td>
+                                <td class="p-3 text-center text-slate-600">22,400</td>
+                                <td class="p-3 text-center text-[#D05B57] font-bold">~14</td>
+                                <td class="p-3 text-center text-slate-600">4</td>
+                                <td class="p-3 text-center text-[#D05B57] font-bold">10 short</td>
+                                <td class="p-3 text-center text-slate-600">$240K</td>
                             </tr>
                             <tr>
-                                <td class="p-4 font-medium text-slate-800">Year 1</td>
-                                <td class="p-4 text-center text-slate-600">52–57K</td>
-                                <td class="p-4 text-center text-[#D05B57] font-semibold">6 (+2)</td>
-                                <td class="p-4 text-center text-[#D05B57] font-semibold">$360K</td>
-                                <td class="p-4 text-center text-[#1E948D] font-semibold">1</td>
-                                <td class="p-4 text-center text-[#1E948D] font-semibold">$60K</td>
+                                <td class="p-3 font-medium text-slate-800">Year 1</td>
+                                <td class="p-3 text-center text-slate-600">54,500</td>
+                                <td class="p-3 text-center text-slate-600">37,200</td>
+                                <td class="p-3 text-center text-[#D05B57] font-bold">~24</td>
+                                <td class="p-3 text-center text-slate-600">6 (+2)</td>
+                                <td class="p-3 text-center text-[#D05B57] font-bold">18 short</td>
+                                <td class="p-3 text-center text-slate-600">$360K</td>
                             </tr>
                             <tr>
-                                <td class="p-4 font-medium text-slate-800">Year 2</td>
-                                <td class="p-4 text-center text-slate-600">62–72K</td>
-                                <td class="p-4 text-center text-[#D05B57] font-semibold">8 (+2)</td>
-                                <td class="p-4 text-center text-[#D05B57] font-semibold">$480K</td>
-                                <td class="p-4 text-center text-[#1E948D] font-semibold">1</td>
-                                <td class="p-4 text-center text-[#1E948D] font-semibold">$60K</td>
+                                <td class="p-3 font-medium text-slate-800">Year 2</td>
+                                <td class="p-3 text-center text-slate-600">67,000</td>
+                                <td class="p-3 text-center text-slate-600">39,400</td>
+                                <td class="p-3 text-center text-[#D05B57] font-bold">~25</td>
+                                <td class="p-3 text-center text-slate-600">8 (+2)</td>
+                                <td class="p-3 text-center text-[#D05B57] font-bold">17 short</td>
+                                <td class="p-3 text-center text-slate-600">$480K</td>
                             </tr>
                             <tr class="bg-slate-50/50">
-                                <td class="p-4 font-medium text-slate-800">Year 3</td>
-                                <td class="p-4 text-center text-slate-600">82–87K</td>
-                                <td class="p-4 text-center text-[#D05B57] font-semibold">10 (+2)</td>
-                                <td class="p-4 text-center text-[#D05B57] font-semibold">$600K</td>
-                                <td class="p-4 text-center text-[#1E948D] font-semibold">1</td>
-                                <td class="p-4 text-center text-[#1E948D] font-semibold">$60K</td>
+                                <td class="p-3 font-medium text-slate-800">Year 3</td>
+                                <td class="p-3 text-center text-slate-600">79,500</td>
+                                <td class="p-3 text-center text-slate-600">41,700</td>
+                                <td class="p-3 text-center text-[#D05B57] font-bold">~27</td>
+                                <td class="p-3 text-center text-slate-600">10 (+2)</td>
+                                <td class="p-3 text-center text-[#D05B57] font-bold">17 short</td>
+                                <td class="p-3 text-center text-slate-600">$600K</td>
                             </tr>
                         </tbody>
-                        <tfoot>
-                            <tr class="border-t-2 border-slate-300 bg-slate-100">
-                                <td class="p-4 font-bold text-slate-900" colspan="3">3-Year Cumulative FTE Cost</td>
-                                <td class="p-4 text-center font-bold text-[#D05B57] text-lg">$1.68M</td>
-                                <td class="p-4 text-center" colspan="1"></td>
-                                <td class="p-4 text-center font-bold text-[#1E948D] text-lg">$180K</td>
-                            </tr>
-                            <tr class="bg-[#6CEECB]/10">
-                                <td class="p-4 font-bold text-[#174762]" colspan="4">3-Year FTE Savings with Verifiable CVO</td>
-                                <td class="p-4 text-center font-bold text-[#174762] text-xl" colspan="2">$1,500,000</td>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
-                <p class="text-center text-slate-400 text-xs mt-4">*Salary only at $60K avg per credentialer. Excludes benefits (~30%), training, ramp time, turnover, management overhead, and office/equipment costs.</p>
+
+                <!-- Key callout -->
+                <div class="bg-red-50 border border-red-200 rounded-2xl p-6 mb-10 gap-bar-bg">
+                    <p class="text-red-700 font-bold text-center font-display mb-2">Even hiring +2 credentialers per year, the team never comes close.</p>
+                    <p class="text-red-600 text-sm text-center">By Year 1, HOMELINK needs 24 FTEs but will only have 6 — a gap of 18 specialists. By Year 3, they need 27 but will only have 10. The status quo is structurally unfixable through hiring at any realistic pace.</p>
+                </div>
+
+                <!-- Side by Side Cost Comparison -->
+                <h3 class="text-xl font-bold text-slate-800 mb-6 font-display text-center">3-Year Cost Comparison</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="rounded-2xl p-6 border-2 border-red-200 bg-red-50/50 text-center">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-red-400 mb-3">If Fully Staffed to Demand</p>
+                        <p class="text-4xl font-extrabold text-[#D05B57] font-display">$4.56M</p>
+                        <p class="text-slate-600 text-sm mt-2">3-year FTE cost</p>
+                        <div class="mt-4 pt-4 border-t border-red-200">
+                            <p class="text-red-600 text-xs">24→25→27 FTEs at $60K each</p>
+                            <p class="text-red-500 text-xs mt-1">This is what it would actually take to meet demand internally</p>
+                        </div>
+                    </div>
+                    <div class="rounded-2xl p-6 border-2 border-amber-200 bg-amber-50/50 text-center">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-amber-500 mb-3">Realistic Hire Pace (+2/yr)</p>
+                        <p class="text-4xl font-extrabold text-amber-600 font-display">$1.44M</p>
+                        <p class="text-slate-600 text-sm mt-2">3-year FTE cost</p>
+                        <div class="mt-4 pt-4 border-t border-amber-200">
+                            <p class="text-amber-600 text-xs">6→8→10 FTEs at $60K each</p>
+                            <p class="text-amber-500 text-xs mt-1">Still 17–18 FTEs short every year. Still 40–60 day turnaround.</p>
+                        </div>
+                    </div>
+                    <div class="rounded-2xl p-6 border-2 border-[#6CEECB] bg-[#6CEECB]/5 text-center">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-[#1E948D] mb-3">Verifiable CVO</p>
+                        <p class="text-4xl font-extrabold text-[#1E948D] font-display">$180K</p>
+                        <p class="text-slate-600 text-sm mt-2">3-year FTE cost</p>
+                        <div class="mt-4 pt-4 border-t border-[#6CEECB]/30">
+                            <p class="text-[#1E948D] text-xs">1 FTE flat. 100% of demand met.</p>
+                            <p class="text-[#1E948D] text-xs mt-1 font-semibold">1–3 day turnaround at any volume.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#6CEECB]/10 border border-[#6CEECB]/30 rounded-2xl p-6 text-center">
+                    <p class="text-[#174762] font-bold text-lg font-display">3-Year FTE Savings: <span class="text-2xl">$1.26M–$4.38M</span></p>
+                    <p class="text-slate-600 text-sm mt-1">$1.26M vs realistic hire pace · $4.38M vs fully staffing to demand</p>
+                </div>
+
+                <p class="text-center text-slate-400 text-xs mt-4">*Salary only at $60K avg per credentialer. Excludes benefits (~30%), training, ramp time, turnover, management overhead, and office/equipment costs. True cost per hire is typically 1.3–1.5x salary.</p>
                 <p class="text-center text-slate-500 text-xs mt-2">Under the CVO model, the 1 FTE of credentialing work is distributed across 2 employees who are cross-leveraged to other teams — no headcount reduction, but significant reallocation of capacity to higher-value work.</p>
             </div>
         </section>
@@ -330,21 +370,28 @@
                     <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#D05B57] mb-4">Workforce Scaling Model</p>
                     <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">Year Over Year: The Hiring Spiral vs. CVO Efficiency</h2>
                     <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                        To grow from 42,000 to 84,000 providers over 3 years while meeting the new annual DME recredentialing mandate, the status quo requires hiring ~2 additional credentialers every year — and the team is still behind with 40–60 day turnaround times. With Verifiable CVO, credentialing stays at 1 FTE regardless of volume.
+                        HOMELINK needs 24 credentialing FTEs by Year 1 to meet demand — but realistically can only hire +2 per year. The chart shows three lines: what's actually needed, what can realistically be hired, and what's needed with Verifiable CVO. The gap between "needed" and "hired" never closes.
                     </p>
                     <div class="space-y-4">
                         <div class="flex items-center space-x-4">
                             <div class="w-3 h-3 rounded-full bg-[#D05B57] flex-shrink-0"></div>
                             <div>
-                                <p class="font-semibold text-slate-800 text-sm">Status quo: 4 → 6 → 8 → 10 FTEs</p>
-                                <p class="text-slate-500 text-xs">Still behind. Still 40–60 day turnaround. Still no CAQH/NPDB.</p>
+                                <p class="font-semibold text-slate-800 text-sm">FTEs needed to meet demand: 14 → 24 → 25 → 27</p>
+                                <p class="text-slate-500 text-xs">What it actually takes to process all packets at 30/wk per specialist.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="w-3 h-3 rounded-full bg-[#FEC041] flex-shrink-0"></div>
+                            <div>
+                                <p class="font-semibold text-slate-800 text-sm">Realistic hire pace: 4 → 6 → 8 → 10</p>
+                                <p class="text-slate-500 text-xs">Adding +2/year. Still 17–18 FTEs short. Still 40–60 day turnaround. Still no CAQH/NPDB.</p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-4">
                             <div class="w-3 h-3 rounded-full bg-[#1E948D] flex-shrink-0"></div>
                             <div>
                                 <p class="font-semibold text-slate-800 text-sm">Verifiable CVO: 1 FTE, flat</p>
-                                <p class="text-slate-500 text-xs">1–3 day turnaround. Full CAQH/NPDB access. Real-time monitoring. Scales to any volume.</p>
+                                <p class="text-slate-500 text-xs">1–3 day turnaround. Full CAQH/NPDB access. Real-time monitoring. 100% of demand met.</p>
                             </div>
                         </div>
                     </div>
@@ -531,8 +578,8 @@
                         <p class="text-sm text-slate-600">16,000 DME providers now require annual recredentialing. The current team cannot meet this obligation — their entire annual capacity (6,240 packets) doesn't cover half the recredentialing volume alone.</p>
                     </div>
                     <div class="p-6 rounded-xl bg-white shadow-sm border border-slate-100 border-l-4 border-l-amber-400">
-                        <h4 class="font-bold text-slate-900 mb-2 font-display">Hiring Spiral: $1.5M+ Over 3 Years</h4>
-                        <p class="text-sm text-slate-600">Growing to 84K providers requires adding ~2 credentialers per year. Over 3 years: 6 additional FTEs at $60K each (salary only) = $1.68M cumulative — still with 40–60 day turnaround and no CAQH/NPDB access.</p>
+                        <h4 class="font-bold text-slate-900 mb-2 font-display">Hiring Spiral: $1.4M–$4.6M Over 3 Years</h4>
+                        <p class="text-sm text-slate-600">Meeting actual demand requires 24–27 FTEs ($4.56M over 3 years). Even at a realistic pace of +2/year (reaching 10 FTEs by Year 3, $1.44M), the team remains 17+ specialists short — still with 40–60 day turnaround and no CAQH/NPDB access.</p>
                     </div>
                     <div class="p-6 rounded-xl bg-white shadow-sm border border-slate-100 border-l-4 border-l-orange-400">
                         <h4 class="font-bold text-slate-900 mb-2 font-display">Provider Attrition & Lost Growth</h4>
@@ -571,11 +618,11 @@
                     <div class="absolute top-0 right-0 w-32 h-32 bg-[#6CEECB]/10 rounded-full -mr-12 -mt-12"></div>
                     <div class="relative z-10">
                         <p class="text-[#6CEECB] font-bold text-sm mb-4 uppercase tracking-wider">Financial</p>
-                        <p class="text-2xl font-bold font-display mb-4">$1.5M+ Saved</p>
+                        <p class="text-2xl font-bold font-display mb-4">$1.3–$4.4M Saved</p>
                         <div class="border-t border-white/10 pt-4 space-y-3">
                             <div class="flex justify-between text-sm">
                                 <span class="text-blue-200/50">FTEs avoided</span>
-                                <span class="text-[#6CEECB] font-semibold">6 over 3 yrs</span>
+                                <span class="text-[#6CEECB] font-semibold">5–26 over 3 yrs</span>
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-blue-200/50">Retro billing</span>
@@ -677,7 +724,7 @@
                     <div class="bg-white/5 border border-white/10 rounded-xl p-6">
                         <div class="text-[#0AA2DD] font-bold text-lg font-display mb-2">Strategic</div>
                         <h4 class="text-white font-bold mb-2">Network Doubling Goal</h4>
-                        <p class="text-blue-100/50 text-sm">Implementing now sets the foundation to absorb 10–15K new providers/year and double the network to 84K+ over 3 years — without the $1.5M+ hiring bill.</p>
+                        <p class="text-blue-100/50 text-sm">Implementing now sets the foundation to absorb 10–15K new providers/year and double the network to 84K+ over 3 years — without the $1.4M–$4.6M hiring bill.</p>
                     </div>
                 </div>
             </div>
@@ -715,19 +762,19 @@
                             <td class="p-4 text-center text-[#1E948D] font-semibold">46,583 hrs (at 13K apps)</td>
                         </tr>
                         <tr>
-                            <td class="p-4 font-medium text-slate-800">Credentialing Team (FTEs)</td>
-                            <td class="p-4 text-center text-[#D05B57]">4 FTEs (growing to 10)</td>
+                            <td class="p-4 font-medium text-slate-800">FTEs Needed to Meet Demand</td>
+                            <td class="p-4 text-center text-[#D05B57]">24–27 (have 4, hiring +2/yr)</td>
                             <td class="p-4 text-center text-[#1E948D] font-semibold">1 FTE (flat at any volume)</td>
                         </tr>
                         <tr>
-                            <td class="p-4 font-medium text-slate-800">3-Year FTE Hiring Cost</td>
-                            <td class="p-4 text-center text-[#D05B57]">$1.68M (6 additional hires)</td>
-                            <td class="p-4 text-center text-[#1E948D] font-semibold">$0 additional hires</td>
+                            <td class="p-4 font-medium text-slate-800">3-Year FTE Cost</td>
+                            <td class="p-4 text-center text-[#D05B57]">$1.44M hired / $4.56M needed</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">$180K</td>
                         </tr>
                         <tr>
                             <td class="p-4 font-medium text-slate-800">Annual Packet Capacity</td>
-                            <td class="p-4 text-center text-[#D05B57]">~6,240 (20% of demand)</td>
-                            <td class="p-4 text-center text-[#1E948D] font-semibold">31,000+ packets/year</td>
+                            <td class="p-4 text-center text-[#D05B57]">~6,240 (17% of Yr 1 demand)</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">37,000+ packets/year</td>
                         </tr>
                         <tr>
                             <td class="p-4 font-medium text-slate-800">DME 1-Year Recred Compliance</td>
@@ -765,7 +812,7 @@
             <div class="relative z-10 max-w-2xl mx-auto">
                 <h2 class="text-3xl md:text-4xl font-bold mb-6 font-display">The Investment Pays for Itself</h2>
                 <p class="text-lg text-blue-100/70 mb-6 leading-relaxed">
-                    This is not a cost — it's an investment in compliance, efficiency, and growth. The alternative is $1.5M+ in hiring over 3 years, ongoing retro billing losses, CMS non-compliance, and a network growth target that becomes structurally impossible.
+                    This is not a cost — it's an investment in compliance, efficiency, and growth. The alternative is $1.4M–$4.6M in hiring over 3 years (and still falling short), ongoing retro billing losses, CMS non-compliance, and a network growth target that becomes structurally impossible.
                 </p>
                 <p class="text-blue-100/50 text-sm mb-10">
                     Whether HOMELINK is 42,000 providers or 400,000 — the Verifiable CVO platform scales without proportional headcount. The question isn't whether to make this change. It's how quickly HOMELINK can start realizing the benefits.
@@ -828,7 +875,7 @@
                     },
                     {
                         label: 'Capacity Gap',
-                        data: [27880, 24760, 21640],
+                        data: [34080, 30960, 27840],
                         backgroundColor: 'rgba(208, 91, 87, 0.6)',
                         borderColor: 'rgba(208, 91, 87, 1)',
                         borderWidth: 1,
@@ -850,14 +897,14 @@
                         annotations: {
                             demandLine: {
                                 type: 'line',
-                                yMin: 31000,
-                                yMax: 31000,
+                                yMin: 37200,
+                                yMax: 37200,
                                 borderColor: '#174762',
                                 borderWidth: 2,
                                 borderDash: [8, 4],
                                 label: {
                                     display: true,
-                                    content: '31K demand',
+                                    content: '37.2K demand (Yr 1)',
                                     position: 'end',
                                     backgroundColor: '#174762',
                                     color: '#fff',
@@ -878,7 +925,7 @@
                         stacked: true,
                         grid: { color: 'rgba(0,0,0,0.04)' },
                         ticks: { font: baseFont, callback: val => (val / 1000) + 'K' },
-                        max: 35000,
+                        max: 42000,
                     }
                 }
             }
@@ -892,16 +939,29 @@
                 labels: ['Today', 'Year 1', 'Year 2', 'Year 3'],
                 datasets: [
                     {
-                        label: 'Status Quo (Internal)',
-                        data: [4, 6, 8, 10],
+                        label: 'FTEs Needed (to meet demand)',
+                        data: [14, 24, 25, 27],
                         borderColor: 'rgba(208, 91, 87, 0.9)',
-                        backgroundColor: 'rgba(208, 91, 87, 0.08)',
+                        backgroundColor: 'rgba(208, 91, 87, 0.06)',
                         fill: true,
                         tension: 0.3,
                         pointRadius: 6,
                         pointHoverRadius: 8,
                         borderWidth: 3,
                         pointBackgroundColor: 'rgba(208, 91, 87, 1)',
+                    },
+                    {
+                        label: 'Realistic Hire Pace (+2/yr)',
+                        data: [4, 6, 8, 10],
+                        borderColor: 'rgba(254, 192, 65, 0.9)',
+                        backgroundColor: 'rgba(254, 192, 65, 0.06)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(254, 192, 65, 1)',
+                        borderDash: [6, 3],
                     },
                     {
                         label: 'Verifiable CVO',
@@ -921,7 +981,7 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom', labels: { font: baseFont, padding: 16 } },
+                    legend: { position: 'bottom', labels: { font: { ...baseFont, size: 11 }, padding: 12 } },
                     tooltip: {
                         callbacks: {
                             label: ctx => `${ctx.dataset.label}: ${ctx.raw} FTEs`
@@ -932,9 +992,9 @@
                     y: {
                         title: { display: true, text: 'Credentialing FTEs', font: baseFont },
                         grid: { color: 'rgba(0,0,0,0.04)' },
-                        ticks: { font: baseFont, stepSize: 2 },
+                        ticks: { font: baseFont, stepSize: 5 },
                         min: 0,
-                        max: 12,
+                        max: 30,
                     },
                     x: {
                         grid: { display: false },
@@ -952,8 +1012,8 @@
                 labels: ['Today', 'Year 1', 'Year 2', 'Year 3'],
                 datasets: [
                     {
-                        label: 'Status Quo — Cumulative FTE Cost',
-                        data: [240, 600, 1080, 1680],
+                        label: 'If Fully Staffed to Demand',
+                        data: [240, 1440, 2940, 4560],
                         borderColor: 'rgba(208, 91, 87, 0.9)',
                         backgroundColor: 'rgba(208, 91, 87, 0.06)',
                         fill: true,
@@ -963,7 +1023,19 @@
                         borderWidth: 2.5,
                     },
                     {
-                        label: 'Verifiable CVO — Cumulative FTE Cost',
+                        label: 'Realistic Hire Pace (+2/yr)',
+                        data: [240, 600, 1080, 1680],
+                        borderColor: 'rgba(254, 192, 65, 0.9)',
+                        backgroundColor: 'rgba(254, 192, 65, 0.06)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        borderWidth: 2.5,
+                        borderDash: [6, 3],
+                    },
+                    {
+                        label: 'Verifiable CVO',
                         data: [240, 60, 120, 180],
                         borderColor: 'rgba(30, 148, 141, 0.9)',
                         backgroundColor: 'rgba(108, 238, 203, 0.08)',
@@ -979,7 +1051,7 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'bottom', labels: { font: { ...baseFont, size: 11 }, padding: 16 } },
+                    legend: { position: 'bottom', labels: { font: { ...baseFont, size: 11 }, padding: 12 } },
                     tooltip: {
                         callbacks: {
                             label: ctx => `${ctx.dataset.label}: $${ctx.raw}K`

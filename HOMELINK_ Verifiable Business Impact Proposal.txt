@@ -23,29 +23,79 @@ Annual Provider Hours     —                     35,833–53,750 hrs saved
 ──────────────────────────────────────────────────────────────────
 Note: Faster onboarding directly reduces provider drop-off. Current 40–60 day turnaround causes providers to spin out before receiving a single referral. A 1–3 day turnaround eliminates this attrition risk.
 
-4b. Team Man-Hours & FTE Savings (3-Year Projection)
-─────────────────────────────────────────────────────────────────────────────────────
-                          Status Quo (Internal)           With Verifiable CVO
-─────────────────────────────────────────────────────────────────────────────────────
-              Network     Cred FTEs   Annual FTE    Cred FTEs   Annual FTE
-Year          Size        Required    Cost*         Required    Cost*
-─────────────────────────────────────────────────────────────────────────────────────
-Current       42,000      4           $240,000      —           —
-Year 1        52,000–     6 (+2)      $360,000      1           $60,000
-              57,000
-Year 2        62,000–     8 (+2)      $480,000      1           $60,000
-              72,000
-Year 3        82,000–     10 (+2)     $600,000      1           $60,000
-              87,000
-─────────────────────────────────────────────────────────────────────────────────────
-3-Year FTE                            $1,680,000                $180,000
-  Cost Total
-3-Year FTE                                          $1,500,000 saved
-  Savings
-─────────────────────────────────────────────────────────────────────────────────────
+4b. Team FTE Demand & Savings (3-Year Projection)
+
+Assumptions:
+- Specialist capacity: 30 packets/week avg × 50 working weeks = 1,560 packets/year per FTE
+- DME recredentialing: 16,000 providers/year (1-year cycle per CMS final rule)
+- Non-DME recredentialing: remaining providers on 3-year cycle
+- New provider intake: 12,500/year (midpoint of 10,000–15,000 target)
+- Salary: $60K avg per credentialer (excludes benefits, training, overhead)
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                Status Quo (Internal)
+              Network     Annual Packet Demand                  FTEs        Realistic   Unfilled
+              Size        ──────────────────────────  FTEs      Have /      Hire Pace   Gap
+Year                      Recreds     New     Total   Needed    Will Hire   (+2/yr)     (FTEs short)
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+Today         42,000      14,000*     8,400†  22,400  ~14       4           4           10 FTEs short
+Year 1        54,500      24,700‡     12,500  37,200  ~24       6 (+2)      6           18 FTEs short
+Year 2        67,000      26,900§     12,500  39,400  ~25       8 (+2)      8           17 FTEs short
+Year 3        79,500      29,200¶     12,500  41,700  ~27       10 (+2)     10          17 FTEs short
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+*  Today's recreds: 42,000 providers / 3-year cycle = ~14,000/year (pre-CMS rule change)
+†  Current new provider pace: ~8,400/year (4,200 added Jun–Dec per Derek)
+‡  Year 1 recreds: 16,000 DME (now annual) + 38,500 non-DME / 3 = ~24,700
+§  Year 2 recreds: 16,000 DME + 51,000 non-DME / 3 = ~26,900 (non-DME grows with network)
+¶  Year 3 recreds: 16,000 DME + 63,500 non-DME / 3 = ~29,200
+
+Key takeaway: Even hiring 2 credentialers per year, the team never comes close to meeting demand.
+By Year 1, they need 24 FTEs but will only have 6 — a gap of 18 specialists.
+By Year 3, they need 27 FTEs but will only have 10 — still 17 specialists short.
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+                                    With Verifiable CVO
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+              Network     Annual Packet     Cred FTEs     Annual FTE     Demand
+Year          Size        Demand            Required      Cost*          Met?
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+Year 1        54,500      37,200            1             $60,000        Yes — 100%
+Year 2        67,000      39,400            1             $60,000        Yes — 100%
+Year 3        79,500      41,700            1             $60,000        Yes — 100%
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+3-Year Cost Comparison (FTE salary only):
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+                                    Status Quo              Verifiable CVO
+                                    (Realistic Hire Pace)
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+Year 1 FTE Cost                     $360,000 (6 FTEs)       $60,000 (1 FTE)
+Year 2 FTE Cost                     $480,000 (8 FTEs)       $60,000 (1 FTE)
+Year 3 FTE Cost                     $600,000 (10 FTEs)      $60,000 (1 FTE)
+3-Year Total                        $1,440,000              $180,000
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+3-Year FTE Savings                                          $1,260,000
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+If HOMELINK were to actually staff to demand (24–27 FTEs):
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+Year 1 FTE Cost                     $1,440,000 (24 FTEs)    $60,000 (1 FTE)
+Year 2 FTE Cost                     $1,500,000 (25 FTEs)    $60,000 (1 FTE)
+Year 3 FTE Cost                     $1,620,000 (27 FTEs)    $60,000 (1 FTE)
+3-Year Total                        $4,560,000              $180,000
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+3-Year FTE Savings                                          $4,380,000
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
 *Salary only at $60K avg. Excludes benefits (~30%), training, ramp time, turnover, management overhead.
 
-Key insight: Under the status quo, HOMELINK must add ~2 credentialers per year just to keep pace — and still operates behind with 40–60 day turnaround times. With Verifiable CVO, credentialing work reduces to 1 FTE of oversight (likely 2 employees cross-leveraged to other teams), and turnaround drops to 1–3 days regardless of volume growth.
+Key insights:
+- HOMELINK is already 10 FTEs short TODAY, before any growth or CMS rule change impact.
+- The realistic hire pace of +2/year never closes the gap — the team stays 17–18 specialists short every year.
+- Even at the realistic hire pace, the status quo costs $1.44M in FTE salary over 3 years and still fails to meet demand.
+- If fully staffed to demand, the 3-year FTE cost would be $4.56M — making the CVO investment a fraction of the true alternative.
+- With Verifiable CVO, 1 FTE of oversight handles 100% of demand at any volume, at $60K/year.
+- The 3 freed credentialers are redeployed to provider relations and other high-value work — not terminated.
 
 4c. Credentialing Capacity & Throughput
 ──────────────────────────────────────────────────────────────────
@@ -81,14 +131,14 @@ Risk: The DME recredentialing cycle reduction from 3 years to 1 year (CMS final 
 
 Compliance Exposure: Without real-time sanction monitoring, HOMELINK continues to risk claims on unlicensed/sanctioned providers. Current quarterly checks (at best) have already resulted in providers operating without valid licenses for months, with payers discovering the gaps. A single incident costs $12.5K+; annual exposure runs 6–7 figures.
 
-Hiring Spiral: Growing the network from 42K to 84K providers over 3 years requires adding ~2 credentialers per year under the status quo. Over 3 years, that's 6 additional FTEs at $360K+ in salary alone — and the team is still behind with 40–60 day turnaround times, still without CAQH/NPDB access, and still not compliant with the 1-year DME recred requirement.
+Hiring Spiral: HOMELINK is already 10 FTEs short of meeting current credentialing demand. Growing the network from 42K to 84K providers over 3 years would require 24–27 FTEs ($4.56M in salary over 3 years) to fully staff to demand. Even at a realistic hiring pace of +2/year (reaching 10 FTEs by Year 3), the team remains 17+ specialists short — still behind with 40–60 day turnaround times, still without CAQH/NPDB access, and still not compliant with the 1-year DME recred requirement.
 
 Provider Attrition: The current 40–60 day credentialing window causes direct provider loss. Providers sign contracts but spin out before receiving a single referral. Providers with multiple TINs refuse to credential beyond the first because the application process takes 2–8 hours per TIN.
 
 Opportunity Cost: Inability to intake 10,000–15,000 new providers per year creates a bottleneck that directly threatens the 3-year network expansion goal of doubling to 84,000+ providers.
 
 6. Value Proposition
-Financial Impact: Avoid $1.5M+ in cumulative hiring costs over 3 years (6 additional FTEs avoided). Eliminate 6–7 figure annual retro billing losses. Prevent revenue leakage from delayed provider activation.
+Financial Impact: Avoid $1.26M–$4.38M in cumulative hiring costs over 3 years (the range depends on whether HOMELINK hires at the realistic pace of +2/year or fully staffs to demand). Eliminate 6–7 figure annual retro billing losses. Prevent revenue leakage from delayed provider activation.
 
 Strategic Impact: Achieve NCQA compliance with built-in audit trails. Meet the new CMS 1-year DME recredentialing mandate without additional resources. Position HOMELINK as a scalable, compliant partner for major payers. Enable provider network to double from 42K to 84K+ without proportional cost increase.
 
