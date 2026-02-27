@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Practitioner Credentialing | HOMELINK Business Impact Proposal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --v-black: #1D1D21;
+            --v-dark-teal: #174762;
+            --v-mint: #6CEECB;
+            --v-teal: #1E948D;
+            --v-green: #35BC98;
+            --v-blue: #0AA2DD;
+            --v-blue-dark: #2092D2;
+            --v-gold: #FEC041;
+            --v-red: #D05B57;
+            --v-gray: #585C64;
+            --v-light-bg: #F5F8FB;
+            --v-light-border: #E9EFF4;
+        }
+
+        body { font-family: 'Open Sans', sans-serif; }
+        h1, h2, h3, .font-display { font-family: 'Montserrat', sans-serif; }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+        }
+        @media (min-width: 768px) { .chart-container { height: 380px; } }
+
+        .hero-gradient { background: linear-gradient(160deg, #1D1D21 0%, #174762 45%, #1E948D 100%); }
+
+        .glow-accent { box-shadow: 0 0 60px rgba(108, 238, 203, 0.1), 0 0 120px rgba(30, 148, 141, 0.06); }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-dark { background: linear-gradient(180deg, #1D1D21 0%, #174762 100%); }
+
+        .checkpoint-line::before {
+            content: '';
+            position: absolute;
+            left: 1.25rem;
+            top: 3rem;
+            bottom: -1rem;
+            width: 2px;
+            background: linear-gradient(180deg, var(--v-mint), var(--v-teal));
+        }
+        .checkpoint-line:last-child::before { display: none; }
+
+        .noise-overlay { position: relative; }
+        .noise-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up { animation: fadeUp 0.7s ease-out forwards; }
+        .animate-fade-up-delay-1 { animation-delay: 0.15s; opacity: 0; }
+        .animate-fade-up-delay-2 { animation-delay: 0.3s; opacity: 0; }
+        .animate-fade-up-delay-3 { animation-delay: 0.45s; opacity: 0; }
+
+        .risk-pulse { animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        .gap-bar-bg { background: repeating-linear-gradient(135deg, transparent, transparent 5px, rgba(208,91,87,0.04) 5px, rgba(208,91,87,0.04) 10px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 leading-normal antialiased">
+
+    <!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
+    <header class="hero-gradient text-white noise-overlay overflow-hidden relative">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[#6CEECB]/5 blur-3xl -mr-48 -mt-48"></div>
+        <div class="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-[#1E948D]/8 blur-3xl -ml-24 -mb-24"></div>
+        
+        <div class="container mx-auto px-6 py-20 md:py-28 relative z-10">
+            <div class="max-w-4xl">
+                <div class="flex items-center space-x-3 mb-8 animate-fade-up">
+                    <span class="h-px w-12 bg-[#6CEECB]/60"></span>
+                    <span class="uppercase tracking-[0.25em] text-xs font-semibold text-[#6CEECB]">Business Impact Proposal · HOMELINK</span>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-[1.1] animate-fade-up animate-fade-up-delay-1">
+                    31K Packets. 4 Specialists. <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#6CEECB] to-[#0AA2DD]">The Math Doesn't Work.</span>
+                </h1>
+                <p class="text-lg md:text-xl font-medium text-blue-100/80 leading-relaxed max-w-3xl mb-10 animate-fade-up animate-fade-up-delay-2">
+                    HOMELINK needs to process 31,000 credentialing packets per year — 16K recredentials plus 15K new providers. Even if every specialist performed at peak capacity, the current team can only handle 9,360. Automation or a CVO partner closes a 21,000+ packet gap without adding headcount.
+                </p>
+                <div class="flex flex-wrap gap-4 animate-fade-up animate-fade-up-delay-3">
+                    <div class="stat-card rounded-xl px-6 py-4 text-center">
+                        <div class="text-3xl font-bold text-[#D05B57] font-display">21K+</div>
+                        <div class="text-xs text-blue-200/70 mt-1">Annual Packet Gap</div>
+                    </div>
+                    <div class="stat-card rounded-xl px-6 py-4 text-center">
+                        <div class="text-3xl font-bold text-[#FEC041] font-display">10–36</div>
+                        <div class="text-xs text-blue-200/70 mt-1">Hires Needed Without AI</div>
+                    </div>
+                    <div class="stat-card rounded-xl px-6 py-4 text-center">
+                        <div class="text-3xl font-bold text-[#6CEECB] font-display">90%</div>
+                        <div class="text-xs text-blue-200/70 mt-1">Faster Onboarding</div>
+                    </div>
+                    <div class="stat-card rounded-xl px-6 py-4 text-center">
+                        <div class="text-3xl font-bold text-[#0AA2DD] font-display">$0</div>
+                        <div class="text-xs text-blue-200/70 mt-1">Retro Billing Risk</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-16 space-y-28">
+
+        <!-- ═══════════════════════════════ SECTION 1: CURRENT STATE — THE CAPACITY CRISIS ═══════════════════════════════ -->
+        <section>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                <div>
+                    <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#D05B57] mb-4">The Current State</p>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">The Team Is Already Underwater</h2>
+                    <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                        With 40,000 practitioners in the network — half requiring credentialing — HOMELINK faces 16,000 recredentialing packets per year before a single new provider is added. Combined with the growth target of 15,000 new providers annually, the total demand is ~31,000 packets/year. Four specialists cannot close that gap at any performance level.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-red-500 flex items-start space-x-4">
+                            <div class="bg-red-50 text-red-600 p-2 rounded-lg text-sm font-bold flex-shrink-0">31K</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Annual Packet Demand</h4>
+                                <p class="text-sm text-slate-500">16,000 recredentials + 15,000 new providers = 31,000 packets/year the team must process.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-red-400 flex items-start space-x-4">
+                            <div class="bg-red-50 text-red-500 p-2 rounded-lg text-sm font-bold flex-shrink-0">9,360</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Max Capacity (Best Case)</h4>
+                                <p class="text-sm text-slate-500">Even if all 4 specialists performed at the top rate of 45 packets/week, the team maxes out at 9,360 packets/year — a 70% shortfall.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-amber-400 flex items-start space-x-4">
+                            <div class="bg-amber-50 text-amber-600 p-2 rounded-lg text-sm font-bold flex-shrink-0">15–45</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Wide Performance Variance</h4>
+                                <p class="text-sm text-slate-500">Specialist output ranges from 15 to 45 packets/week — a 3x gap that makes workforce planning unreliable and capacity projections volatile.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-orange-400 flex items-start space-x-4">
+                            <div class="bg-orange-50 text-orange-600 p-2 rounded-lg text-sm font-bold flex-shrink-0">6–7 fig</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Annual Retro Billing Losses</h4>
+                                <p class="text-sm text-slate-500">6–7 figure write-offs annually from claims on unlicensed or sanctioned providers — a single claim can cost $12.5K+.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Capacity Gap Visualization -->
+                <div>
+                    <div class="bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-slate-100 mb-6">
+                        <h3 class="text-center font-bold text-slate-800 text-sm uppercase tracking-widest mb-2 font-display">Annual Capacity vs. Demand</h3>
+                        <p class="text-center text-slate-400 text-xs mb-6">4 specialists · 31,000 packets/year required</p>
+                        <div class="chart-container" style="max-width:100%; height: 300px;">
+                            <canvas id="capacityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-red-50 border border-red-200 rounded-2xl p-6 text-center gap-bar-bg">
+                        <p class="text-red-700 font-bold text-lg font-display">21,640 packet gap</p>
+                        <p class="text-red-600 text-sm mt-1">Even at peak performance, the current team covers only <strong>30%</strong> of annual demand</p>
+                        <p class="text-red-500 text-xs mt-2">At the team average (~30/wk), capacity drops to just 6,240/year — an 80% shortfall</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 2: WORKFORCE SCALING MODEL ═══════════════════════════════ -->
+        <section class="bg-white rounded-3xl shadow-xl p-8 md:p-16 border border-slate-100">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#D05B57] mb-4">Workforce Scaling Model</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">How Many Hires Does It Take?</h2>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    To meet 31,000 packets/year through hiring alone, HOMELINK needs between 14 and 40 total specialists — depending on whether new hires match the top performer or the team's lower range. That's 10 to 36 additional hires.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="rounded-2xl p-8 border-2 border-red-200 bg-red-50/50 text-center">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-red-400 mb-3">Low Performer (15/wk)</p>
+                    <p class="text-5xl font-extrabold text-[#D05B57] font-display">40</p>
+                    <p class="text-slate-600 text-sm mt-2">specialists needed</p>
+                    <div class="mt-4 pt-4 border-t border-red-200">
+                        <p class="text-red-600 font-bold text-lg">+36 hires</p>
+                        <p class="text-slate-500 text-xs">780 packets/yr per specialist</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl p-8 border-2 border-amber-200 bg-amber-50/50 text-center">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-amber-500 mb-3">Team Average (30/wk)</p>
+                    <p class="text-5xl font-extrabold text-amber-600 font-display">20</p>
+                    <p class="text-slate-600 text-sm mt-2">specialists needed</p>
+                    <div class="mt-4 pt-4 border-t border-amber-200">
+                        <p class="text-amber-600 font-bold text-lg">+16 hires</p>
+                        <p class="text-slate-500 text-xs">1,560 packets/yr per specialist</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl p-8 border-2 border-slate-200 bg-slate-50 text-center">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Top Performer (45/wk)</p>
+                    <p class="text-5xl font-extrabold text-slate-700 font-display">14</p>
+                    <p class="text-slate-600 text-sm mt-2">specialists needed</p>
+                    <div class="mt-4 pt-4 border-t border-slate-200">
+                        <p class="text-slate-700 font-bold text-lg">+10 hires</p>
+                        <p class="text-slate-500 text-xs">2,340 packets/yr per specialist</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Implications -->
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-gradient-to-br from-[#F5F8FB] to-[#E9EFF4] p-8 rounded-2xl border border-[#E9EFF4]">
+                    <h4 class="text-[#174762] font-bold text-lg mb-5 font-display text-center">Hiring Cost Projection (Salary Only)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div>
+                            <p class="text-2xl font-bold text-[#D05B57] font-display">$2.16M</p>
+                            <p class="text-slate-500 text-xs mt-1">36 hires × $60K avg</p>
+                            <p class="text-slate-400 text-xs">Low performer scenario</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-amber-600 font-display">$960K</p>
+                            <p class="text-slate-500 text-xs mt-1">16 hires × $60K avg</p>
+                            <p class="text-slate-400 text-xs">Average scenario</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-slate-700 font-display">$600K</p>
+                            <p class="text-slate-500 text-xs mt-1">10 hires × $60K avg</p>
+                            <p class="text-slate-400 text-xs">Best-case scenario</p>
+                        </div>
+                    </div>
+                    <p class="text-center text-slate-400 text-xs mt-6">Excludes benefits, training, ramp time, management overhead, turnover costs, and office/equipment.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 3: RECOMMENDED APPROACH ═══════════════════════════════ -->
+        <section class="section-dark text-white rounded-3xl p-8 md:p-16 glow-accent noise-overlay overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-[#6CEECB]/5 rounded-full -mr-48 -mt-48"></div>
+            <div class="relative z-10">
+                <div class="max-w-3xl mx-auto text-center mb-16">
+                    <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#6CEECB] mb-4">Recommended Approach</p>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-tight">Verifiable + CredAgent: <br class="hidden md:block"/>Close the 21K Gap Without Hiring</h2>
+                    <p class="text-lg text-blue-100/70 leading-relaxed">
+                        Replace manual workflows with a modern, automated credentialing platform featuring robust API integration into iVGM. Automate primary source verification, continuous sanction monitoring, and provider onboarding — establishing a fully NCQA-compliant audit trail while enabling the existing team of 4 to manage 31,000+ packets/year.
+                    </p>
+                </div>
+
+                <!-- Solution Flow -->
+                <div class="max-w-2xl mx-auto space-y-8">
+                    <div class="relative checkpoint-line flex items-start space-x-5">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#6CEECB] to-[#1E948D] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#1E948D]/20">1</div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-6 flex-1">
+                            <h4 class="font-bold text-[#6CEECB] mb-1">Automated Primary Source Verification</h4>
+                            <p class="text-blue-100/60 text-sm">CredAgent autonomously verifies licenses, certifications, NPI, sanctions, and board status across 3,200+ integrations — replacing manual lookups with seconds-fast verification.</p>
+                        </div>
+                    </div>
+                    <div class="relative checkpoint-line flex items-start space-x-5">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#35BC98] to-[#1E948D] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#35BC98]/20">2</div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-6 flex-1">
+                            <h4 class="font-bold text-[#35BC98] mb-1">API Integration to iVGM</h4>
+                            <p class="text-blue-100/60 text-sm">Eliminate redundant data entry with direct API integration to iVGM. Verified provider data flows automatically into your system of record, freeing 60% of team bandwidth.</p>
+                        </div>
+                    </div>
+                    <div class="relative checkpoint-line flex items-start space-x-5">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#0AA2DD] to-[#174762] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#0AA2DD]/20">3</div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-6 flex-1">
+                            <h4 class="font-bold text-[#0AA2DD] mb-1">Continuous Sanction Monitoring</h4>
+                            <p class="text-blue-100/60 text-sm">Replace periodic manual checks with real-time, automated sanction and exclusion monitoring — eliminating retro billing exposure before claims are ever processed.</p>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start space-x-5">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#FEC041] to-[#F5A623] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#FEC041]/20">4</div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-6 flex-1">
+                            <h4 class="font-bold text-[#FEC041] mb-1">NCQA-Compliant Audit Trail</h4>
+                            <p class="text-blue-100/60 text-sm">Every verification step, source, and decision is logged automatically — creating a complete, audit-ready compliance record that satisfies NCQA standards without manual documentation.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust Pillars -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
+                        <div class="text-2xl mb-3">🛡️</div>
+                        <h4 class="font-bold text-white text-sm mb-2">NCQA-Certified CVO</h4>
+                        <p class="text-blue-100/50 text-xs">Backed by certified credentialing expertise and a continuous feedback loop between CVO operations and AI engineering.</p>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
+                        <div class="text-2xl mb-3">🔗</div>
+                        <h4 class="font-bold text-white text-sm mb-2">iVGM API Integration</h4>
+                        <p class="text-blue-100/50 text-xs">Direct system integration eliminates double-entry and ensures a single source of truth across credentialing and network operations.</p>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
+                        <div class="text-2xl mb-3">⚙️</div>
+                        <h4 class="font-bold text-white text-sm mb-2">Scalable Architecture</h4>
+                        <p class="text-blue-100/50 text-xs">Process 31,000+ packets/year with the same team of 4. No linear headcount — the platform scales with your volume.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 4: COST OF INACTION ═══════════════════════════════ -->
+        <section>
+            <div class="max-w-3xl mx-auto mb-16 text-center">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#D05B57] mb-4">Cost of Inaction</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">What Happens If We Don't Act</h2>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    Every month without automation compounds the capacity gap. The 16,000 recredentialing packets don't wait — and the 15,000 new providers per year are already arriving.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="chart-container" style="height:400px;">
+                    <canvas id="costChart"></canvas>
+                </div>
+                <div class="space-y-6">
+                    <div class="p-6 rounded-xl bg-white shadow-sm border border-slate-100 border-l-4 border-l-red-400">
+                        <h4 class="font-bold text-slate-900 mb-2 font-display">Compliance & Financial Risk</h4>
+                        <p class="text-sm text-slate-600">Continued exposure to 6–7 figure retro billing write-offs. A single claim on an unlicensed provider costs $12.5K — and with a 21K+ packet backlog, manual gaps are inevitable.</p>
+                    </div>
+                    <div class="p-6 rounded-xl bg-white shadow-sm border border-slate-100 border-l-4 border-l-amber-400">
+                        <h4 class="font-bold text-slate-900 mb-2 font-display">Hiring Spiral: $600K–$2.16M</h4>
+                        <p class="text-sm text-slate-600">Closing the gap through hiring requires 10–36 new specialists at $60K+ each (salary only). Benefits, training, ramp time, and turnover push the true cost even higher.</p>
+                    </div>
+                    <div class="p-6 rounded-xl bg-white shadow-sm border border-slate-100 border-l-4 border-l-orange-400">
+                        <h4 class="font-bold text-slate-900 mb-2 font-display">Recredentialing Backlog Compounds</h4>
+                        <p class="text-sm text-slate-600">16,000 recreds don't pause for the growth initiative. Every missed recredential is a compliance risk and a provider who may fall out of network — creating churn the team can't recover from.</p>
+                    </div>
+                    <div class="p-6 rounded-xl bg-white shadow-sm border border-slate-100 border-l-4 border-l-slate-400">
+                        <h4 class="font-bold text-slate-900 mb-2 font-display">Growth Mandate Blocked</h4>
+                        <p class="text-sm text-slate-600">15,000 new providers/year can't be onboarded when the team is already 70% short on existing volume. The growth target becomes structurally unachievable.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 5: STRATEGIC COMPARISON ═══════════════════════════════ -->
+        <section class="bg-white rounded-3xl shadow-xl p-8 md:p-16 border border-slate-100">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#1E948D] mb-4">Operational Readiness</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Manual vs. Automated: Capability Comparison</h2>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    Automation doesn't just speed things up — it fundamentally changes what's possible with the existing team.
+                </p>
+            </div>
+            <div class="chart-container" style="max-width:550px; height:400px;">
+                <canvas id="radarChart"></canvas>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 6: VALUE PROPOSITION ═══════════════════════════════ -->
+        <section>
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#1E948D] mb-4">Value Proposition</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Three Dimensions of Impact</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#6CEECB]/10 rounded-full -mr-12 -mt-12"></div>
+                    <div class="relative z-10">
+                        <p class="text-[#6CEECB] font-bold text-sm mb-4 uppercase tracking-wider">Financial Impact</p>
+                        <p class="text-2xl font-bold font-display mb-4">$600K–$2.16M Avoided</p>
+                        <div class="border-t border-white/10 pt-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Hiring avoided</span>
+                                <span class="text-[#6CEECB] font-semibold">10–36 FTEs</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Retro billing</span>
+                                <span class="text-[#FEC041] font-semibold">Eliminated</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Revenue leakage</span>
+                                <span class="text-[#35BC98] font-semibold">Prevented</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#35BC98]/10 rounded-full -mr-12 -mt-12"></div>
+                    <div class="relative z-10">
+                        <p class="text-[#35BC98] font-bold text-sm mb-4 uppercase tracking-wider">Strategic Impact</p>
+                        <p class="text-2xl font-bold font-display mb-4">NCQA Compliance</p>
+                        <div class="border-t border-white/10 pt-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Audit readiness</span>
+                                <span class="text-[#35BC98] font-semibold">Always-on</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Payer positioning</span>
+                                <span class="text-[#0AA2DD] font-semibold">Robust partner</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Growth enabled</span>
+                                <span class="text-[#6CEECB] font-semibold">15K/yr new</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#FEC041]/10 rounded-full -mr-12 -mt-12"></div>
+                    <div class="relative z-10">
+                        <p class="text-[#FEC041] font-bold text-sm mb-4 uppercase tracking-wider">Operational Impact</p>
+                        <p class="text-2xl font-bold font-display mb-4">4 Specialists → 31K</p>
+                        <div class="border-t border-white/10 pt-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Turnaround</span>
+                                <span class="text-[#FEC041] font-semibold">28 → 1–3 days</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Manual entry</span>
+                                <span class="text-[#6CEECB] font-semibold">Eliminated</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Team role</span>
+                                <span class="text-[#35BC98] font-semibold">Oversight only</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 7: URGENCY ═══════════════════════════════ -->
+        <section class="section-dark text-white rounded-3xl p-8 md:p-16 noise-overlay relative overflow-hidden">
+            <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#6CEECB]/5 rounded-full blur-3xl -mr-32 -mb-32"></div>
+            <div class="relative z-10 max-w-3xl mx-auto text-center">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#FEC041] mb-4">Urgency & Timeline</p>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-tight">The Window to Act Is Now</h2>
+                <p class="text-lg text-blue-100/70 leading-relaxed mb-12">
+                    The 16,000 recredentialing packets are already due. The 15,000 new providers are already arriving. Every month without automation widens the gap and compounds the backlog — a backlog that hiring alone cannot realistically close.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                        <div class="text-[#D05B57] font-bold text-lg font-display mb-2 risk-pulse">Immediate</div>
+                        <h4 class="text-white font-bold mb-2">Retro Billing Exposure</h4>
+                        <p class="text-blue-100/50 text-sm">Every day without automated sanction monitoring is a day a claim on an unlicensed provider could cost $12.5K+ in write-offs.</p>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                        <div class="text-[#FEC041] font-bold text-lg font-display mb-2">Near-Term</div>
+                        <h4 class="text-white font-bold mb-2">Capacity Crisis</h4>
+                        <p class="text-blue-100/50 text-sm">The team is 70% short on capacity today. Each month adds ~1,250 new packets to the backlog while recreds continue to pile up.</p>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                        <div class="text-[#0AA2DD] font-bold text-lg font-display mb-2">Strategic</div>
+                        <h4 class="text-white font-bold mb-2">Growth Mandate</h4>
+                        <p class="text-blue-100/50 text-sm">Implementing now sets the foundation to absorb 15,000 new providers/year without the $600K–$2.16M hiring bill.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ EXECUTIVE SUMMARY TABLE ═══════════════════════════════ -->
+        <section class="max-w-3xl mx-auto">
+            <div class="text-center mb-12">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#1E948D] mb-4">Executive Summary</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">The Transformation at a Glance</h2>
+            </div>
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-slate-50">
+                            <th class="p-4 text-left font-semibold text-slate-500 uppercase text-xs tracking-wider">Metric</th>
+                            <th class="p-4 text-center font-semibold text-red-500 uppercase text-xs tracking-wider">Current State</th>
+                            <th class="p-4 text-center font-semibold text-[#1E948D] uppercase text-xs tracking-wider">With Verifiable</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">Annual Packet Demand</td>
+                            <td class="p-4 text-center text-slate-500">31,000/year</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">31,000/year — handled</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">Current Team Capacity</td>
+                            <td class="p-4 text-center text-[#D05B57]">9,360 max (30% of demand)</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">31K+ with same 4 staff</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">Credentialing Turnaround</td>
+                            <td class="p-4 text-center text-slate-500">28.6 days (up to 45)</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">1–3 days</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">Hires Needed for Growth</td>
+                            <td class="p-4 text-center text-[#D05B57]">+10 to +36 FTEs</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">0 additional FTEs</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">Hiring Cost (Salary Only)</td>
+                            <td class="p-4 text-center text-[#D05B57]">$600K–$2.16M</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">$0</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">Retro Billing Risk</td>
+                            <td class="p-4 text-center text-[#D05B57]">6–7 figure annual loss</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">$0 — automated checks</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">NCQA Compliance</td>
+                            <td class="p-4 text-center text-slate-500">Manual effort</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">Built-in audit trail</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">iVGM Integration</td>
+                            <td class="p-4 text-center text-[#D05B57]">Manual double-entry</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">Direct API sync</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ CTA ═══════════════════════════════ -->
+        <section class="hero-gradient text-white rounded-3xl p-10 md:p-20 text-center noise-overlay relative overflow-hidden">
+            <div class="absolute top-0 left-1/2 w-[500px] h-[500px] bg-[#6CEECB]/5 rounded-full -translate-x-1/2 -mt-64 blur-3xl"></div>
+            <div class="relative z-10 max-w-2xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 font-display">Ready to Close the Gap?</h2>
+                <p class="text-lg text-blue-100/70 mb-10 leading-relaxed">
+                    See how Verifiable's automated credentialing platform with CredAgent can turn 4 specialists into a team that handles 31,000+ packets/year — without a single new hire.
+                </p>
+                <a href="https://verifiable.com/get-demo" target="_blank" class="inline-block bg-[#6CEECB] text-[#1D1D21] font-bold px-10 py-4 rounded-full hover:bg-[#35BC98] hover:text-white transition-colors shadow-lg shadow-black/20 text-lg">
+                    Book a Live Demo →
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-sm">Prepared by Verifiable · <a href="https://verifiable.com" class="text-[#6CEECB] hover:underline">verifiable.com</a></p>
+            <p class="text-xs mt-2 text-slate-500">Business Impact Proposal for HOMELINK · Based on HOMELINK operational data and Verifiable platform capabilities.</p>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════ CHARTS ═══════════════════════════════ -->
+    <script>
+        function wrapLabel(label, maxWidth) {
+            if (label.length <= maxWidth) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length <= maxWidth) {
+                    currentLine = (currentLine + ' ' + word).trim();
+                } else {
+                    if (currentLine) lines.push(currentLine);
+                    currentLine = word;
+                }
+            });
+            if (currentLine) lines.push(currentLine);
+            return lines;
+        }
+
+        const baseFont = { family: "'Open Sans', sans-serif", size: 13, weight: 500 };
+
+        // ──── CAPACITY GAP CHART ────
+        const capCtx = document.getElementById('capacityChart').getContext('2d');
+        new Chart(capCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    wrapLabel('Low (15/wk)', 14),
+                    wrapLabel('Average (30/wk)', 14),
+                    wrapLabel('Top (45/wk)', 14),
+                ],
+                datasets: [
+                    {
+                        label: 'Team Capacity (4 specialists)',
+                        data: [3120, 6240, 9360],
+                        backgroundColor: 'rgba(108, 238, 203, 0.8)',
+                        borderColor: 'rgba(30, 148, 141, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: 'Capacity Gap',
+                        data: [27880, 24760, 21640],
+                        backgroundColor: 'rgba(208, 91, 87, 0.6)',
+                        borderColor: 'rgba(208, 91, 87, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: baseFont, padding: 16 } },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: ${ctx.raw.toLocaleString()} packets/year`
+                        }
+                    },
+                    annotation: {
+                        annotations: {
+                            demandLine: {
+                                type: 'line',
+                                yMin: 31000,
+                                yMax: 31000,
+                                borderColor: '#174762',
+                                borderWidth: 2,
+                                borderDash: [8, 4],
+                                label: {
+                                    display: true,
+                                    content: '31K demand',
+                                    position: 'end',
+                                    backgroundColor: '#174762',
+                                    color: '#fff',
+                                    font: { size: 11, weight: 'bold' },
+                                    padding: 4,
+                                }
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        stacked: true, 
+                        grid: { display: false }, 
+                        ticks: { font: baseFont } 
+                    },
+                    y: {
+                        stacked: true,
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        ticks: { font: baseFont, callback: val => (val / 1000) + 'K' },
+                        max: 35000,
+                    }
+                }
+            }
+        });
+
+        // ──── COST COMPARISON CHART ────
+        const costCtx = document.getElementById('costChart').getContext('2d');
+        new Chart(costCtx, {
+            type: 'line',
+            data: {
+                labels: ['Now', '6 Mo', '12 Mo', '18 Mo', '24 Mo'],
+                datasets: [
+                    {
+                        label: 'Hiring Path — Low Perf (36 hires)',
+                        data: [0, 540, 1080, 1620, 2160],
+                        borderColor: 'rgba(208, 91, 87, 0.9)',
+                        backgroundColor: 'rgba(208, 91, 87, 0.06)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        borderWidth: 2.5,
+                    },
+                    {
+                        label: 'Hiring Path — Avg Perf (16 hires)',
+                        data: [0, 240, 480, 720, 960],
+                        borderColor: 'rgba(254, 192, 65, 0.9)',
+                        backgroundColor: 'rgba(254, 192, 65, 0.06)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        borderWidth: 2.5,
+                    },
+                    {
+                        label: 'Hiring Path — Top Perf (10 hires)',
+                        data: [0, 150, 300, 450, 600],
+                        borderColor: 'rgba(88, 92, 100, 0.7)',
+                        backgroundColor: 'rgba(88, 92, 100, 0.04)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        borderWidth: 2,
+                        borderDash: [5, 3],
+                    },
+                    {
+                        label: 'Verifiable Platform',
+                        data: [0, 80, 160, 240, 320],
+                        borderColor: 'rgba(30, 148, 141, 0.9)',
+                        backgroundColor: 'rgba(108, 238, 203, 0.08)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        borderWidth: 2.5,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { ...baseFont, size: 11 }, padding: 16 } },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: $${ctx.raw}K`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Cumulative Cost ($K, salary only)', font: baseFont },
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        ticks: { font: baseFont, callback: val => '$' + val + 'K' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: baseFont }
+                    }
+                }
+            }
+        });
+
+        // ──── RADAR CHART ────
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: [
+                    wrapLabel('NCQA Compliance', 16),
+                    wrapLabel('Packet Throughput', 16),
+                    wrapLabel('Onboarding Speed', 16),
+                    wrapLabel('Sanction Monitoring', 16),
+                    wrapLabel('Team Scalability', 16),
+                    wrapLabel('iVGM Integration', 16),
+                ],
+                datasets: [
+                    {
+                        label: 'Current Manual Process',
+                        data: [4, 2, 2, 3, 2, 2],
+                        borderColor: 'rgba(208, 91, 87, 0.8)',
+                        backgroundColor: 'rgba(208, 91, 87, 0.1)',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: 'rgba(208, 91, 87, 1)',
+                    },
+                    {
+                        label: 'Verifiable + CredAgent',
+                        data: [9, 10, 9, 10, 10, 9],
+                        borderColor: 'rgba(30, 148, 141, 0.8)',
+                        backgroundColor: 'rgba(108, 238, 203, 0.12)',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: 'rgba(30, 148, 141, 1)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: baseFont, padding: 20 } },
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 10,
+                        ticks: { stepSize: 2, font: { size: 10 }, backdropColor: 'transparent' },
+                        pointLabels: { font: { ...baseFont, size: 12 } },
+                        grid: { color: 'rgba(0,0,0,0.06)' },
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
