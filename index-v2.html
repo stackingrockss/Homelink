@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Practitioner Credentialing | HOMELINK Business Impact Proposal</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --v-black: #1D1D21;
+            --v-dark-teal: #174762;
+            --v-mint: #6CEECB;
+            --v-teal: #1E948D;
+            --v-green: #35BC98;
+            --v-blue: #0AA2DD;
+            --v-blue-dark: #2092D2;
+            --v-gold: #FEC041;
+            --v-red: #D05B57;
+            --v-gray: #585C64;
+            --v-light-bg: #F5F8FB;
+            --v-light-border: #E9EFF4;
+        }
+
+        body { font-family: 'Open Sans', sans-serif; }
+        h1, h2, h3, .font-display { font-family: 'Montserrat', sans-serif; }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+        }
+        @media (min-width: 768px) { .chart-container { height: 380px; } }
+
+        .hero-gradient { background: linear-gradient(160deg, #1D1D21 0%, #174762 45%, #1E948D 100%); }
+
+        .glow-accent { box-shadow: 0 0 60px rgba(108, 238, 203, 0.1), 0 0 120px rgba(30, 148, 141, 0.06); }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-dark { background: linear-gradient(180deg, #1D1D21 0%, #174762 100%); }
+
+        .checkpoint-line::before {
+            content: '';
+            position: absolute;
+            left: 1.25rem;
+            top: 3rem;
+            bottom: -1rem;
+            width: 2px;
+            background: linear-gradient(180deg, var(--v-mint), var(--v-teal));
+        }
+        .checkpoint-line:last-child::before { display: none; }
+
+        .noise-overlay { position: relative; }
+        .noise-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up { animation: fadeUp 0.7s ease-out forwards; }
+        .animate-fade-up-delay-1 { animation-delay: 0.15s; opacity: 0; }
+        .animate-fade-up-delay-2 { animation-delay: 0.3s; opacity: 0; }
+        .animate-fade-up-delay-3 { animation-delay: 0.45s; opacity: 0; }
+
+        .risk-pulse { animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        .gap-bar-bg { background: repeating-linear-gradient(135deg, transparent, transparent 5px, rgba(208,91,87,0.04) 5px, rgba(208,91,87,0.04) 10px); }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+        .scroll-indicator { animation: bounce 2s ease-in-out infinite; }
+
+        .highlight-row { background: linear-gradient(90deg, rgba(108,238,203,0.08) 0%, rgba(108,238,203,0.03) 100%); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 leading-normal antialiased">
+
+    <!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
+    <header class="hero-gradient text-white noise-overlay overflow-hidden relative">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[#6CEECB]/5 blur-3xl -mr-48 -mt-48"></div>
+        <div class="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-[#1E948D]/8 blur-3xl -ml-24 -mb-24"></div>
+
+        <div class="container mx-auto px-6 py-20 md:py-28 relative z-10">
+            <div class="max-w-4xl">
+                <div class="flex items-center space-x-3 mb-8 animate-fade-up">
+                    <span class="h-px w-12 bg-[#6CEECB]/60"></span>
+                    <span class="uppercase tracking-[0.25em] text-xs font-semibold text-[#6CEECB]">Business Impact Proposal · HOMELINK</span>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-[1.1] animate-fade-up animate-fade-up-delay-1">
+                    31K Packets. 4 Specialists. <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#6CEECB] to-[#0AA2DD]">The Math Doesn't Work.</span>
+                </h1>
+                <p class="text-lg md:text-xl font-medium text-blue-100/80 leading-relaxed max-w-3xl mb-10 animate-fade-up animate-fade-up-delay-2">
+                    37,000+ annual packets. 4 specialists. An 80% capacity shortfall that hiring alone cannot close.
+                </p>
+                <div class="flex flex-wrap gap-4 animate-fade-up animate-fade-up-delay-3">
+                    <div class="stat-card rounded-xl px-6 py-4 text-center">
+                        <div class="text-3xl font-bold text-[#D05B57] font-display">24</div>
+                        <div class="text-xs text-blue-200/70 mt-1">FTEs Needed (Have 4)</div>
+                    </div>
+                    <div class="stat-card rounded-xl px-6 py-4 text-center">
+                        <div class="text-3xl font-bold text-[#FEC041] font-display">$4.6M</div>
+                        <div class="text-xs text-blue-200/70 mt-1">3-Year Cost to Staff Demand</div>
+                    </div>
+                    <div class="stat-card rounded-xl px-6 py-4 text-center">
+                        <div class="text-3xl font-bold text-[#6CEECB] font-display">4→1</div>
+                        <div class="text-xs text-blue-200/70 mt-1">FTEs with CVO</div>
+                    </div>
+                    <div class="stat-card rounded-xl px-6 py-4 text-center">
+                        <div class="text-3xl font-bold text-[#0AA2DD] font-display">25 min</div>
+                        <div class="text-xs text-blue-200/70 mt-1">vs 4 hr Application</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="relative z-10 flex flex-col items-center pb-8">
+            <a href="#executive-summary" class="text-blue-200/40 hover:text-blue-200/70 transition-colors flex flex-col items-center gap-2">
+                <span class="text-xs uppercase tracking-widest">See the full comparison</span>
+                <svg class="w-5 h-5 scroll-indicator" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-16">
+
+        <!-- ═══════════════════════════════ SECTION 1: EXECUTIVE SUMMARY TABLE ═══════════════════════════════ -->
+        <section id="executive-summary" class="max-w-4xl mx-auto mb-24">
+            <div class="text-center mb-12">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#1E948D] mb-4">Executive Summary</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">The Full Picture</h2>
+            </div>
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-slate-50">
+                            <th class="p-4 text-left font-semibold text-slate-500 uppercase text-xs tracking-wider">Metric</th>
+                            <th class="p-4 text-center font-semibold text-red-500 uppercase text-xs tracking-wider">Current State</th>
+                            <th class="p-4 text-center font-semibold text-[#1E948D] uppercase text-xs tracking-wider">With Verifiable CVO</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">Credentialing Turnaround</td>
+                            <td class="p-4 text-center text-[#D05B57]">40–60 days</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">1–3 days</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">Provider Application Time</td>
+                            <td class="p-4 text-center text-[#D05B57]">2–8 hours (avg 4 hrs)</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">~25 minutes</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">FTEs Needed to Meet Demand</td>
+                            <td class="p-4 text-center text-[#D05B57]">24–27 (have 4, hiring +2/yr)</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">1 FTE (flat at any volume)</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td class="p-4 font-bold text-slate-900">3-Year FTE Cost</td>
+                            <td class="p-4 text-center text-[#D05B57] font-bold">$1.44M hired / $4.56M needed</td>
+                            <td class="p-4 text-center text-[#1E948D] font-bold text-lg">$180K</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">Annual Packet Capacity</td>
+                            <td class="p-4 text-center text-[#D05B57]">~6,240 (17% of Yr 1 demand)</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">37,000+ packets/year</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">DME 1-Year Recred Compliance</td>
+                            <td class="p-4 text-center text-[#D05B57]">Cannot meet requirement</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">Fully automated</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">Sanction Monitoring</td>
+                            <td class="p-4 text-center text-[#D05B57]">Quarterly manual checks</td>
+                            <td class="p-4 text-center text-[#1E948D] font-semibold">Real-time continuous</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Bottom summary bar -->
+            <div class="bg-slate-900 text-white rounded-b-2xl -mt-1 px-8 py-5 text-center">
+                <p class="text-lg font-bold font-display">Bottom line: <span class="text-[#6CEECB]">$1.3M–$4.4M saved.</span> <span class="text-[#0AA2DD]">1–3 day turnaround.</span> <span class="text-[#FEC041]">100% demand met.</span></p>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 2: COST OF INACTION ═══════════════════════════════ -->
+        <section class="mb-32">
+            <div class="max-w-3xl mx-auto mb-16 text-center">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#D05B57] mb-4">Cost of Inaction</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">What Happens If We Don't Act</h2>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    Every month without a CVO partner widens the gap.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="chart-container" style="height:400px;">
+                    <canvas id="costChart"></canvas>
+                </div>
+                <div class="space-y-6">
+                    <div class="p-6 rounded-xl bg-white shadow-sm border border-slate-100 border-l-4 border-l-red-400">
+                        <h4 class="font-bold text-slate-900 mb-2 font-display">DME Compliance Failure</h4>
+                        <p class="text-sm text-slate-600">16,000 DME providers need annual recreds. Team capacity (6,240) doesn't cover half the recred volume alone. Non-compliance risks payer contracts.</p>
+                    </div>
+                    <div class="p-6 rounded-xl bg-white shadow-sm border border-slate-100 border-l-4 border-l-amber-400">
+                        <h4 class="font-bold text-slate-900 mb-2 font-display">Hiring Spiral: $1.4M–$4.6M Over 3 Years</h4>
+                        <p class="text-sm text-slate-600">24–27 FTEs needed ($4.56M/3yr). Even at +2/year ($1.44M), still 17+ short with 40–60 day turnaround.</p>
+                    </div>
+                    <div class="p-6 rounded-xl bg-white shadow-sm border border-slate-100 border-l-4 border-l-orange-400">
+                        <h4 class="font-bold text-slate-900 mb-2 font-display">Provider Attrition & Lost Growth</h4>
+                        <p class="text-sm text-slate-600">40–60 day turnaround drives providers away. Multi-TIN providers refuse to credential beyond the first because each TIN takes 2–8 hours.</p>
+                    </div>
+                    <div class="p-6 rounded-xl bg-white shadow-sm border border-slate-100 border-l-4 border-l-slate-400">
+                        <h4 class="font-bold text-slate-900 mb-2 font-display">Growth Mandate Blocked</h4>
+                        <p class="text-sm text-slate-600">10–15K new providers/year can't onboard when the team is 80% short on existing volume. The 3-year target of 84K+ providers stalls.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 3: THE CAPACITY CRISIS ═══════════════════════════════ -->
+        <section class="mb-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                <div>
+                    <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#D05B57] mb-4">The Current State</p>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">The Team Is Already Underwater</h2>
+                    <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                        With the new CMS rule reducing DME recredentialing to annually, plus growth targets of 10–15K new providers/year, demand reaches 37,000+ packets in Year 1. The team of 4 can process 6,240.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-red-500 flex items-start space-x-4">
+                            <div class="bg-red-50 text-red-600 p-2 rounded-lg text-sm font-bold flex-shrink-0">37K+</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Annual Packet Demand</h4>
+                                <p class="text-sm text-slate-500">16K DME recreds + ~9K non-DME recreds + 12.5K new providers = 37,500 packets/year.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-red-400 flex items-start space-x-4">
+                            <div class="bg-red-50 text-red-500 p-2 rounded-lg text-sm font-bold flex-shrink-0">6,240</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Actual Team Capacity</h4>
+                                <p class="text-sm text-slate-500">30 packets/week × 4 specialists × 52 weeks = 6,240/year — 17% of demand.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-amber-400 flex items-start space-x-4">
+                            <div class="bg-amber-50 text-amber-600 p-2 rounded-lg text-sm font-bold flex-shrink-0">40–60d</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Credentialing Turnaround</h4>
+                                <p class="text-sm text-slate-500">Providers spin out before receiving a single referral. Multi-TIN providers refuse to credential beyond the first.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-orange-400 flex items-start space-x-4">
+                            <div class="bg-orange-50 text-orange-600 p-2 rounded-lg text-sm font-bold flex-shrink-0">6–7 fig</div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Annual Retro Billing Losses</h4>
+                                <p class="text-sm text-slate-500">Claims on unlicensed/sanctioned providers. Quarterly monitoring leaves months-long blind spots.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Capacity Gap Visualization -->
+                <div>
+                    <div class="bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-slate-100 mb-6">
+                        <h3 class="text-center font-bold text-slate-800 text-sm uppercase tracking-widest mb-2 font-display">Annual Capacity vs. Demand</h3>
+                        <p class="text-center text-slate-400 text-xs mb-6">4 specialists · 37,200 packets/year required (Year 1)</p>
+                        <div class="chart-container" style="max-width:100%; height: 300px;">
+                            <canvas id="capacityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-red-50 border border-red-200 rounded-2xl p-6 text-center gap-bar-bg">
+                        <p class="text-red-700 font-bold text-lg font-display">30,960 packet gap (Year 1)</p>
+                        <p class="text-red-600 text-sm mt-1">At the team average of 30/wk, the current team covers only <strong>17%</strong> of Year 1 demand (37,200 packets)</p>
+                        <p class="text-red-500 text-xs mt-2">Even at peak (45/wk all 4), capacity is 9,360 — still a 75% shortfall. HOMELINK needs 24 FTEs to meet Year 1 demand alone.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 4: RECOMMENDED APPROACH ═══════════════════════════════ -->
+        <section class="section-dark text-white rounded-3xl p-8 md:p-16 glow-accent noise-overlay overflow-hidden relative mb-28">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-[#6CEECB]/5 rounded-full -mr-48 -mt-48"></div>
+            <div class="relative z-10">
+                <div class="max-w-3xl mx-auto text-center mb-16">
+                    <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#6CEECB] mb-4">Recommended Approach</p>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-tight">Verifiable CVO + CredAgent AI:<br class="hidden md:block"/>Close the 21K Gap Without Hiring</h2>
+                    <p class="text-lg text-blue-100/70 leading-relaxed">
+                        Outsource to Verifiable as an NCQA-certified CVO. CredAgent AI verifies across 3,200+ sources. 4 FTEs → 1 FTE of oversight.
+                    </p>
+                </div>
+
+                <!-- Solution Flow -->
+                <div class="max-w-2xl mx-auto space-y-8">
+                    <div class="relative checkpoint-line flex items-start space-x-5">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#6CEECB] to-[#1E948D] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#1E948D]/20">1</div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-6 flex-1">
+                            <h4 class="font-bold text-[#6CEECB] mb-1">Full CVO Outsource with CredAgent AI</h4>
+                            <p class="text-blue-100/60 text-sm">Autonomous verification across 3,200+ sources — licenses, NPI, sanctions, board status. Handles volume spikes without added resources.</p>
+                        </div>
+                    </div>
+                    <div class="relative checkpoint-line flex items-start space-x-5">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#35BC98] to-[#1E948D] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#35BC98]/20">2</div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-6 flex-1">
+                            <h4 class="font-bold text-[#35BC98] mb-1">25-Minute Provider Application</h4>
+                            <p class="text-blue-100/60 text-sm">One 25-minute digital application replaces 2–8 hours per TIN. CAQH auto-fill. Multiple TINs = one application.</p>
+                        </div>
+                    </div>
+                    <div class="relative checkpoint-line flex items-start space-x-5">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#0AA2DD] to-[#174762] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#0AA2DD]/20">3</div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-6 flex-1">
+                            <h4 class="font-bold text-[#0AA2DD] mb-1">Real-Time Continuous Sanction Monitoring</h4>
+                            <p class="text-blue-100/60 text-sm">Real-time automated monitoring replaces quarterly manual checks. Detect issues immediately — not months later.</p>
+                        </div>
+                    </div>
+                    <div class="relative flex items-start space-x-5">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#FEC041] to-[#F5A623] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#FEC041]/20">4</div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-6 flex-1">
+                            <h4 class="font-bold text-[#FEC041] mb-1">API Integration to iVGM + NCQA Audit Trail</h4>
+                            <p class="text-blue-100/60 text-sm">API integration eliminates double-entry into iVGM. Every step logged automatically for NCQA-compliant audit trail.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust Pillars — elevated styling -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+                    <div class="bg-white/10 border border-[#6CEECB]/20 rounded-xl p-8 text-center">
+                        <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#6CEECB]/15 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-[#6CEECB]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <h4 class="font-bold text-white text-base mb-2 font-display">NCQA-Certified CVO</h4>
+                        <p class="text-blue-100/50 text-sm">CMS 1-year DME mandate compliant out of the box.</p>
+                    </div>
+                    <div class="bg-white/10 border border-[#35BC98]/20 rounded-xl p-8 text-center">
+                        <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#35BC98]/15 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-[#35BC98]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                        </div>
+                        <h4 class="font-bold text-white text-base mb-2 font-display">CAQH + 3,200+ Sources</h4>
+                        <p class="text-blue-100/50 text-sm">Primary source access the team doesn't have today.</p>
+                    </div>
+                    <div class="bg-white/10 border border-[#0AA2DD]/20 rounded-xl p-8 text-center">
+                        <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#0AA2DD]/15 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-[#0AA2DD]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        </div>
+                        <h4 class="font-bold text-white text-base mb-2 font-display">Infinite Scalability</h4>
+                        <p class="text-blue-100/50 text-sm">42K or 400K providers — no proportional headcount increase.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 5: FINANCIAL IMPACT (CONSOLIDATED) ═══════════════════════════════ -->
+        <section class="bg-white rounded-3xl shadow-xl p-8 md:p-16 border border-slate-100 mb-28">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#1E948D] mb-4">Financial Impact</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">The Numbers Behind the Decision</h2>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    Real savings — for providers and the HOMELINK team. 46,000+ provider hours saved annually.
+                </p>
+            </div>
+
+            <!-- Provider Time: Compact 2-column comparison -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-2xl mx-auto">
+                <div class="rounded-2xl p-8 border-2 border-red-200 bg-red-50/50 text-center">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-red-400 mb-3">Current Application</p>
+                    <p class="text-5xl font-extrabold text-[#D05B57] font-display">4 hrs</p>
+                    <p class="text-slate-600 text-sm mt-2">average per provider</p>
+                    <div class="mt-4 pt-4 border-t border-red-200">
+                        <p class="text-red-600 text-xs">Range: 2–8 hrs. Per TIN — 15 TINs = 15 applications.</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl p-8 border-2 border-[#6CEECB] bg-[#6CEECB]/5 text-center">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-[#1E948D] mb-3">Verifiable Application</p>
+                    <p class="text-5xl font-extrabold text-[#1E948D] font-display">25 min</p>
+                    <p class="text-slate-600 text-sm mt-2">average per provider</p>
+                    <div class="mt-4 pt-4 border-t border-[#6CEECB]/30">
+                        <p class="text-[#1E948D] text-xs">One application, all TINs. CAQH auto-fill.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3-Year Cost Comparison -->
+            <h3 class="text-xl font-bold text-slate-800 mb-6 font-display text-center">3-Year Cost Comparison</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="rounded-2xl p-6 border-2 border-red-200 bg-red-50/50 text-center">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-red-400 mb-3">If Fully Staffed to Demand</p>
+                    <p class="text-4xl font-extrabold text-[#D05B57] font-display">$4.56M</p>
+                    <p class="text-slate-600 text-sm mt-2">3-year FTE cost</p>
+                    <div class="mt-4 pt-4 border-t border-red-200">
+                        <p class="text-red-600 text-xs">24→25→27 FTEs at $60K each</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl p-6 border-2 border-amber-200 bg-amber-50/50 text-center">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-amber-500 mb-3">Realistic Hire Pace (+2/yr)</p>
+                    <p class="text-4xl font-extrabold text-amber-600 font-display">$1.44M</p>
+                    <p class="text-slate-600 text-sm mt-2">3-year FTE cost</p>
+                    <div class="mt-4 pt-4 border-t border-amber-200">
+                        <p class="text-amber-600 text-xs">6→8→10 FTEs — still 17–18 short</p>
+                    </div>
+                </div>
+                <div class="rounded-2xl p-6 border-2 border-[#6CEECB] bg-[#6CEECB]/5 text-center">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-[#1E948D] mb-3">Verifiable CVO</p>
+                    <p class="text-4xl font-extrabold text-[#1E948D] font-display">$180K</p>
+                    <p class="text-slate-600 text-sm mt-2">3-year FTE cost</p>
+                    <div class="mt-4 pt-4 border-t border-[#6CEECB]/30">
+                        <p class="text-[#1E948D] text-xs">1 FTE flat. 100% of demand met.</p>
+                        <p class="text-[#1E948D] text-xs mt-1 font-semibold">1–3 day turnaround at any volume.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-[#6CEECB]/10 border border-[#6CEECB]/30 rounded-2xl p-6 text-center mb-10">
+                <p class="text-[#174762] font-bold text-lg font-display">3-Year FTE Savings: <span class="text-2xl">$1.26M–$4.38M</span></p>
+                <p class="text-slate-600 text-sm mt-1">$1.26M vs realistic hire pace · $4.38M vs fully staffing to demand</p>
+            </div>
+
+            <!-- FTE Trajectory Chart -->
+            <div class="bg-gradient-to-br from-[#F5F8FB] to-[#E9EFF4] p-8 md:p-10 rounded-2xl border border-[#E9EFF4]">
+                <h3 class="text-center font-bold text-slate-800 text-sm uppercase tracking-widest mb-2 font-display">FTE Headcount: 3-Year Trajectory</h3>
+                <p class="text-center text-slate-400 text-xs mb-6">Credentialing team size as network doubles</p>
+                <div class="chart-container" style="max-width:100%; height: 300px;">
+                    <canvas id="fteChart"></canvas>
+                </div>
+            </div>
+
+            <p class="text-center text-slate-400 text-xs mt-4">*Salary only at $60K avg. True cost per hire is 1.3–1.5x (benefits, training, turnover). CVO model: 1 FTE of cred work distributed across 2 employees cross-leveraged to other teams.</p>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 6: COMPLIANCE & DME MANDATE ═══════════════════════════════ -->
+        <section class="bg-white rounded-3xl shadow-xl p-8 md:p-16 border border-slate-100 mb-20">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#D05B57] mb-4">Compliance Imperative</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">The DME Recredentialing Mandate Changes Everything</h2>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    DME recredentialing cycle cut from 3 years to 1. 16,000 providers must be recredentialed annually — starting now.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-red-50 border border-red-200 rounded-2xl p-8">
+                    <h4 class="font-bold text-[#D05B57] text-lg mb-4 font-display">Without a CVO Partner</h4>
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex items-start space-x-3">
+                            <span class="text-[#D05B57] font-bold mt-0.5">&#x2717;</span>
+                            <span>Full team capacity consumed by DME recreds alone — and still not enough</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-[#D05B57] font-bold mt-0.5">&#x2717;</span>
+                            <span>Zero capacity for new provider intake</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-[#D05B57] font-bold mt-0.5">&#x2717;</span>
+                            <span>CMS non-compliance risks payer relationships</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-[#D05B57] font-bold mt-0.5">&#x2717;</span>
+                            <span>Quarterly sanction checks leave months-long blind spots</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-[#D05B57] font-bold mt-0.5">&#x2717;</span>
+                            <span>No CAQH access</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-[#6CEECB]/5 border border-[#6CEECB]/30 rounded-2xl p-8">
+                    <h4 class="font-bold text-[#174762] text-lg mb-4 font-display">With Verifiable CVO</h4>
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex items-start space-x-3">
+                            <span class="text-[#1E948D] font-bold mt-0.5">&#x2713;</span>
+                            <span>16,000 DME recreds handled automatically on the 1-year cycle</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-[#1E948D] font-bold mt-0.5">&#x2713;</span>
+                            <span>Full capacity for 10–15K new providers/year</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-[#1E948D] font-bold mt-0.5">&#x2713;</span>
+                            <span>CMS-compliant from day one</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-[#1E948D] font-bold mt-0.5">&#x2713;</span>
+                            <span>Real-time continuous monitoring — immediate alerts</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-[#1E948D] font-bold mt-0.5">&#x2713;</span>
+                            <span>Full CAQH and 3,200+ source access</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Compliance metrics -->
+            <div class="bg-gradient-to-br from-[#F5F8FB] to-[#E9EFF4] p-8 rounded-2xl border border-[#E9EFF4]">
+                <h4 class="text-[#174762] font-bold text-lg mb-5 font-display text-center">Compliance & Risk Impact</h4>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+                    <div>
+                        <p class="text-2xl font-bold text-[#D05B57] font-display">6–7 fig</p>
+                        <p class="text-slate-500 text-xs mt-1">Current annual retro billing losses</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-[#1E948D] font-display">$0</p>
+                        <p class="text-slate-500 text-xs mt-1">Retro billing with real-time monitoring</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-[#D05B57] font-display">Quarterly</p>
+                        <p class="text-slate-500 text-xs mt-1">Current sanction check frequency</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-[#1E948D] font-display">Real-Time</p>
+                        <p class="text-slate-500 text-xs mt-1">Continuous automated monitoring</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 7: VALUE PROPOSITION ═══════════════════════════════ -->
+        <section class="mb-24">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#1E948D] mb-4">Value Proposition</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">What Changes on Day One</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#6CEECB]/10 rounded-full -mr-12 -mt-12"></div>
+                    <div class="relative z-10">
+                        <p class="text-[#6CEECB] font-bold text-sm mb-4 uppercase tracking-wider">Financial</p>
+                        <p class="text-2xl font-bold font-display mb-4">$1.3–$4.4M Saved</p>
+                        <div class="border-t border-white/10 pt-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">FTEs avoided</span>
+                                <span class="text-[#6CEECB] font-semibold">5–26 over 3 yrs</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Retro billing</span>
+                                <span class="text-[#FEC041] font-semibold">Eliminated</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Revenue leak</span>
+                                <span class="text-[#35BC98] font-semibold">Prevented</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#35BC98]/10 rounded-full -mr-12 -mt-12"></div>
+                    <div class="relative z-10">
+                        <p class="text-[#35BC98] font-bold text-sm mb-4 uppercase tracking-wider">Compliance</p>
+                        <p class="text-2xl font-bold font-display mb-4">CMS + NCQA Ready</p>
+                        <div class="border-t border-white/10 pt-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">DME 1-yr cycle</span>
+                                <span class="text-[#35BC98] font-semibold">Compliant</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Monitoring</span>
+                                <span class="text-[#0AA2DD] font-semibold">Real-time</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Audit trail</span>
+                                <span class="text-[#6CEECB] font-semibold">Built-in</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#FEC041]/10 rounded-full -mr-12 -mt-12"></div>
+                    <div class="relative z-10">
+                        <p class="text-[#FEC041] font-bold text-sm mb-4 uppercase tracking-wider">Operational</p>
+                        <p class="text-2xl font-bold font-display mb-4">4 FTEs → 1 FTE</p>
+                        <div class="border-t border-white/10 pt-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Turnaround</span>
+                                <span class="text-[#FEC041] font-semibold">60d → 1–3d</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">App time</span>
+                                <span class="text-[#6CEECB] font-semibold">4hr → 25min</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Manual entry</span>
+                                <span class="text-[#35BC98] font-semibold">Eliminated</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#0AA2DD]/10 rounded-full -mr-12 -mt-12"></div>
+                    <div class="relative z-10">
+                        <p class="text-[#0AA2DD] font-bold text-sm mb-4 uppercase tracking-wider">Scalability</p>
+                        <p class="text-2xl font-bold font-display mb-4">42K → 84K+</p>
+                        <div class="border-t border-white/10 pt-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">New/year</span>
+                                <span class="text-[#0AA2DD] font-semibold">10–15K</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Platform limit</span>
+                                <span class="text-[#6CEECB] font-semibold">None</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-blue-200/50">Hiring needed</span>
+                                <span class="text-[#35BC98] font-semibold">Zero</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ SECTION 8: URGENCY & TIMELINE ═══════════════════════════════ -->
+        <section class="section-dark text-white rounded-3xl p-8 md:p-16 noise-overlay relative overflow-hidden mb-12">
+            <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#6CEECB]/5 rounded-full blur-3xl -mr-32 -mb-32"></div>
+            <div class="relative z-10 max-w-3xl mx-auto text-center">
+                <p class="uppercase tracking-[0.2em] text-xs font-semibold text-[#FEC041] mb-4">Urgency & Timeline</p>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-tight">Every Month of Delay Costs More</h2>
+                <p class="text-lg text-blue-100/70 leading-relaxed mb-12">
+                    The CMS mandate is in effect. 16,000 recreds are due. 10–15K new providers are arriving. Hiring alone cannot close this gap.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                        <div class="text-[#D05B57] font-bold text-lg font-display mb-2 risk-pulse">Immediate</div>
+                        <h4 class="text-white font-bold mb-2">Compliance & Financial Exposure</h4>
+                        <p class="text-blue-100/50 text-sm">Every day without real-time monitoring risks claims on unlicensed providers ($12.5K+ each).</p>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                        <div class="text-[#FEC041] font-bold text-lg font-display mb-2">Near-Term</div>
+                        <h4 class="text-white font-bold mb-2">Capacity Crisis Compounds</h4>
+                        <p class="text-blue-100/50 text-sm">80% capacity shortfall today. Each month adds ~1,250 packets to the backlog.</p>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-6">
+                        <div class="text-[#0AA2DD] font-bold text-lg font-display mb-2">Strategic</div>
+                        <h4 class="text-white font-bold mb-2">Network Doubling Goal</h4>
+                        <p class="text-blue-100/50 text-sm">Double the network to 84K+ over 3 years — without the $1.4M–$4.6M hiring bill.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════ CTA ═══════════════════════════════ -->
+        <section class="hero-gradient text-white rounded-3xl p-10 md:p-20 text-center noise-overlay relative overflow-hidden">
+            <div class="absolute top-0 left-1/2 w-[500px] h-[500px] bg-[#6CEECB]/5 rounded-full -translate-x-1/2 -mt-64 blur-3xl"></div>
+            <div class="relative z-10 max-w-2xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 font-display">The Investment Pays for Itself</h2>
+                <p class="text-lg text-blue-100/70 mb-10 leading-relaxed">
+                    The alternative is $1.4M–$4.6M in hiring (and still falling short), ongoing retro billing losses, and a growth target that becomes impossible.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-sm">Prepared by Verifiable · <a href="https://verifiable.com" class="text-[#6CEECB] hover:underline">verifiable.com</a></p>
+            <p class="text-xs mt-2 text-slate-500">Business Impact Proposal for HOMELINK · Based on HOMELINK operational data and Verifiable platform capabilities.</p>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════ CHARTS ═══════════════════════════════ -->
+    <script>
+        function wrapLabel(label, maxWidth) {
+            if (label.length <= maxWidth) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length <= maxWidth) {
+                    currentLine = (currentLine + ' ' + word).trim();
+                } else {
+                    if (currentLine) lines.push(currentLine);
+                    currentLine = word;
+                }
+            });
+            if (currentLine) lines.push(currentLine);
+            return lines;
+        }
+
+        const baseFont = { family: "'Open Sans', sans-serif", size: 13, weight: 500 };
+
+        // ──── COST COMPARISON CHART (now in Cost of Inaction section) ────
+        const costCtx = document.getElementById('costChart').getContext('2d');
+        new Chart(costCtx, {
+            type: 'line',
+            data: {
+                labels: ['Today', 'Year 1', 'Year 2', 'Year 3'],
+                datasets: [
+                    {
+                        label: 'If Fully Staffed to Demand',
+                        data: [240, 1440, 2940, 4560],
+                        borderColor: 'rgba(208, 91, 87, 0.9)',
+                        backgroundColor: 'rgba(208, 91, 87, 0.06)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        borderWidth: 2.5,
+                    },
+                    {
+                        label: 'Realistic Hire Pace (+2/yr)',
+                        data: [240, 600, 1080, 1680],
+                        borderColor: 'rgba(254, 192, 65, 0.9)',
+                        backgroundColor: 'rgba(254, 192, 65, 0.06)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        borderWidth: 2.5,
+                        borderDash: [6, 3],
+                    },
+                    {
+                        label: 'Verifiable CVO',
+                        data: [240, 60, 120, 180],
+                        borderColor: 'rgba(30, 148, 141, 0.9)',
+                        backgroundColor: 'rgba(108, 238, 203, 0.08)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        borderWidth: 2.5,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { ...baseFont, size: 11 }, padding: 12 } },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: $${ctx.raw}K`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Cumulative FTE Cost ($K, salary only)', font: baseFont },
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        ticks: { font: baseFont, callback: val => '$' + val + 'K' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: baseFont }
+                    }
+                }
+            }
+        });
+
+        // ──── CAPACITY GAP CHART ────
+        const capCtx = document.getElementById('capacityChart').getContext('2d');
+        new Chart(capCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    wrapLabel('Low (15/wk)', 14),
+                    wrapLabel('Average (30/wk)', 14),
+                    wrapLabel('Top (45/wk)', 14),
+                ],
+                datasets: [
+                    {
+                        label: 'Team Capacity (4 specialists)',
+                        data: [3120, 6240, 9360],
+                        backgroundColor: 'rgba(108, 238, 203, 0.8)',
+                        borderColor: 'rgba(30, 148, 141, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    },
+                    {
+                        label: 'Capacity Gap',
+                        data: [34080, 30960, 27840],
+                        backgroundColor: 'rgba(208, 91, 87, 0.6)',
+                        borderColor: 'rgba(208, 91, 87, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: baseFont, padding: 16 } },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: ${ctx.raw.toLocaleString()} packets/year`
+                        }
+                    },
+                    annotation: {
+                        annotations: {
+                            demandLine: {
+                                type: 'line',
+                                yMin: 37200,
+                                yMax: 37200,
+                                borderColor: '#174762',
+                                borderWidth: 2,
+                                borderDash: [8, 4],
+                                label: {
+                                    display: true,
+                                    content: '37.2K demand (Yr 1)',
+                                    position: 'end',
+                                    backgroundColor: '#174762',
+                                    color: '#fff',
+                                    font: { size: 11, weight: 'bold' },
+                                    padding: 4,
+                                }
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        grid: { display: false },
+                        ticks: { font: baseFont }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        ticks: { font: baseFont, callback: val => (val / 1000) + 'K' },
+                        max: 42000,
+                    }
+                }
+            }
+        });
+
+        // ──── FTE TRAJECTORY CHART (now in Financial Impact section) ────
+        const fteCtx = document.getElementById('fteChart').getContext('2d');
+        new Chart(fteCtx, {
+            type: 'line',
+            data: {
+                labels: ['Today', 'Year 1', 'Year 2', 'Year 3'],
+                datasets: [
+                    {
+                        label: 'FTEs Needed (to meet demand)',
+                        data: [14, 24, 25, 27],
+                        borderColor: 'rgba(208, 91, 87, 0.9)',
+                        backgroundColor: 'rgba(208, 91, 87, 0.06)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(208, 91, 87, 1)',
+                    },
+                    {
+                        label: 'Realistic Hire Pace (+2/yr)',
+                        data: [4, 6, 8, 10],
+                        borderColor: 'rgba(254, 192, 65, 0.9)',
+                        backgroundColor: 'rgba(254, 192, 65, 0.06)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(254, 192, 65, 1)',
+                        borderDash: [6, 3],
+                    },
+                    {
+                        label: 'Verifiable CVO',
+                        data: [4, 1, 1, 1],
+                        borderColor: 'rgba(30, 148, 141, 0.9)',
+                        backgroundColor: 'rgba(108, 238, 203, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(30, 148, 141, 1)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { ...baseFont, size: 11 }, padding: 12 } },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: ${ctx.raw} FTEs`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Credentialing FTEs', font: baseFont },
+                        grid: { color: 'rgba(0,0,0,0.04)' },
+                        ticks: { font: baseFont, stepSize: 5 },
+                        min: 0,
+                        max: 30,
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: baseFont }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
